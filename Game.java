@@ -9,6 +9,11 @@ public class Game {
 	private JButton map[] = new JButton[225];
 	private JFrame screen;
 	private int tileNum = 0;
+	
+	//private ImageIcon topBorder = ImageIO.read(getClass().getResource("Image/Border.PNG"));
+	private ImageIcon topImage = new ImageIcon("Images/bank2.jpg");
+	
+	
 	public Game(){
 		//Below is the decloration of the main components of the interface.
 		screen = new JFrame(); 
@@ -21,13 +26,23 @@ public class Game {
 		
 		//Setting tiles
 		for(int i = 0; i<columns; i++){
-			map[tileNum] = new JButton("");
+			
+			if (i == 0){
+			map[tileNum] = new JButton(topImage);
+			} else {
+				map[tileNum] = new JButton("");
+			}
+			map[tileNum].setMargin(new Insets(0,0,0,0));
 			map[tileNum].setBorder(null);
-
 			menuPanel.add(map[tileNum]);
 			tileNum++;
 			for (int j = 0; j<rows; j++){
-				map[tileNum] = new JButton("");
+				if (i == 0){
+					map[tileNum] = new JButton(topImage);
+				} else {
+					map[tileNum] = new JButton("");
+				}
+				map[tileNum].setMargin(new Insets(0,0,0,0));
 				map[tileNum].setBorder(null);
 				menuPanel.add(map[tileNum]);
 				tileNum++;
