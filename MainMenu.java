@@ -7,21 +7,18 @@ public class MainMenu {
 	private JLabel title;
 	private JButton play;
 	private JButton leaderStats;
-	
+	private Game g;
 
 	public MainMenu(){
+		g = new Game();
 		//Below is the decloration of the main components of the interface.
 		JFrame screen = new JFrame(); 
-		JPanel mainPanel = new JPanel();
 		JPanel menuPanel = new JPanel();
-		BorderLayout firstLayout = new BorderLayout();
-		GridLayout secondLayout = new GridLayout(3,1);
+		GridLayout mainLayout = new GridLayout(3,1);
 		
 		//Setting up the main components
-		screen.setContentPane(mainPanel);
-		mainPanel.setLayout(firstLayout);
-		mainPanel.add("Center", menuPanel);
-		menuPanel.setLayout(secondLayout);
+		screen.setContentPane(menuPanel);
+		menuPanel.setLayout(mainLayout);
 		
 		//Setting text
 		title = new JLabel("Main Menu");
@@ -33,11 +30,21 @@ public class MainMenu {
 		menuPanel.add(play);
 		menuPanel.add(leaderStats);
 		
+		//Making the buttons work.
+		play.addActionListener(new ActionListener() 
+		{ 
+			public void actionPerformed(ActionEvent e) 
+			{ 
+				g.visible();
+			} 
+		} );
+		
+		
 		
 		//Settings for the window
 		screen.setVisible(true);
 		screen.setTitle("Puzzle Game...");
-		screen.setSize(800,650);
+		screen.setSize(400,350);
 		screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
