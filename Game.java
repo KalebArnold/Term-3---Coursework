@@ -5,17 +5,26 @@ import java.util.Random;
 
 public class Game {
 // variables and locals to this class
-	private int rows = 9;
-	private int columns = 13;
+	private int rows = 13;
+	private int columns = 9;
+	private int invRows = 13;
+	private int invColumns = 5;
 	private int tileNum = 0;
+	private int invTileNum = 0;
 	private int backSelect = 0;
 	
 	private JButton map[] = new JButton[225];
+	private JButton inventory[] = new JButton[225];
 	private JFrame screen;
-	private JPanel menuPanel;
-
+	private JPanel mainPanel;
+	private JPanel gamePanel;
+	private JPanel invPanel;
 	
 	private Random rnd = new Random();
+
+//	Log variables
+	private boolean log = false;
+	private boolean longLog = false;
 	
 // Images for the game
 	private ImageIcon topImage = new ImageIcon("Images/bank2.jpg");
@@ -30,22 +39,34 @@ public class Game {
 	public Game(){
 		//Below is the decloration of the main components of the interface.
 		screen = new JFrame(); 
-		menuPanel = new JPanel();
-		GridLayout mainLayout = new GridLayout(rows,columns);
+		gamePanel = new JPanel();
+		mainPanel = new JPanel();
+		invPanel = new JPanel();
+		BorderLayout mainLayout = new BorderLayout();
+		GridLayout gameLayout = new GridLayout(rows,columns);
+		GridLayout invLayout = new GridLayout(invRows, invColumns);
+		
 		
 		//Setting up the main components
-		screen.setContentPane(menuPanel);
-		menuPanel.setLayout(mainLayout);
+		screen.setContentPane(mainPanel);
+		mainPanel.setLayout(mainLayout);
+		gamePanel.setLayout(gameLayout);
+		invPanel.setLayout(invLayout);
+		
+		mainPanel.add("West", gamePanel);
+		mainPanel.add("East", invPanel);
+		
 		
 		//Setting tiles
 		backgroundSetup();
+		inventorySetup();
 		
 		
 		//Settings for the window
 		screen.setVisible(false);
 		screen.setTitle("Puzzle Game...");
-		screen.setSize(400,350);
-		screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		screen.setSize(576,456);
+		screen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
 	private void backgroundSetup()
@@ -56,7 +77,7 @@ public class Game {
 			
 			if (i == 0){
 				map[tileNum] = new JButton(topImage);
-			} else if (i == 8){
+			} else if (i == 12){
 				map[tileNum] = new JButton(bottomImage);
 			} else if (backSelect <= 17){
 				map[tileNum] = new JButton(backgroundImageOne);
@@ -70,14 +91,14 @@ public class Game {
 		
 			map[tileNum].setMargin(new Insets(0,0,0,0));
 			map[tileNum].setBorder(null);
-			menuPanel.add(map[tileNum]);
+			gamePanel.add(map[tileNum]);
 			tileNum++;
 			
 			for (int j = 0; j<columns; j++){
 				background();
 				if (i == 0){
 					map[tileNum] = new JButton(topImage);
-				} else if (i == 8){
+				} else if (i == 12){
 					map[tileNum] = new JButton(bottomImage);
 				} else if (backSelect <= 17){
 					map[tileNum] = new JButton(backgroundImageOne);
@@ -90,8 +111,39 @@ public class Game {
 				}
 				map[tileNum].setMargin(new Insets(0,0,0,0));
 				map[tileNum].setBorder(null);
-				menuPanel.add(map[tileNum]);
+				gamePanel.add(map[tileNum]);
 				tileNum++;
+			}
+		}
+	}
+	
+	private void inventorySetup()
+	{
+		for(int i = 0; i<invRows; i++)
+		{
+			if (i == 0){
+				inventory[invTileNum] = new JButton(topImage);
+			} else if (i == 12){
+				inventory[invTileNum] = new JButton(bottomImage);
+			} else {
+				inventory[invTileNum] = new JButton(backgroundImageOne);
+			}
+			inventory[invTileNum].setMargin(new Insets(0,0,0,0));
+			inventory[invTileNum].setBorder(null);
+			invPanel.add(inventory[invTileNum]);
+			invTileNum++;
+			for(int j = 0; j<invColumns; j++){
+				if (i == 0){
+					inventory[invTileNum] = new JButton(topImage);
+				} else if (i == 12){
+					inventory[invTileNum] = new JButton(bottomImage);
+				} else {
+					inventory[invTileNum] = new JButton(backgroundImageOne);
+				}
+				inventory[invTileNum].setMargin(new Insets(0,0,0,0));
+				inventory[invTileNum].setBorder(null);
+				invPanel.add(inventory[invTileNum]);
+				invTileNum++;
 			}
 		}
 	}
