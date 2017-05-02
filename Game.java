@@ -9,11 +9,13 @@ public class Game {
 	private int columns = 9;
 	private int invRows = 13;
 	private int invColumns = 5;
-	private int tileNum = 0;
+	private int gameX = 0;
+	private int gameY = 0;
 	private int invTileNum = 0;
 	private int backSelect = 0;
+	private int checkLevel = 0;
 	
-	private JButton map[] = new JButton[225];
+	private JButton map[][] = new JButton[13][13];
 	private JButton inventory[] = new JButton[225];
 	private JFrame screen;
 	private JPanel mainPanel;
@@ -33,7 +35,9 @@ public class Game {
 	private ImageIcon backgroundImageTwo = new ImageIcon("Images/water2.jpg");
 	private ImageIcon backgroundImageThree = new ImageIcon("Images/water3.jpg");
 	private ImageIcon backgroundImageFour = new ImageIcon("Images/water4.jpg");
-	
+	private ImageIcon logImage = new ImageIcon("Images/stump1.jpg");
+	private ImageIcon bottomLogImage = new ImageIcon("Images/stump2.jpg");
+	private ImageIcon topLogImage = new ImageIcon("Images/stump3.jpg");
 	
 	
 	public Game(){
@@ -60,13 +64,32 @@ public class Game {
 		//Setting tiles
 		backgroundSetup();
 		inventorySetup();
+		levelSetup();
+		
+		
+		
+		//Tile print
+		
+		
+		
+		/*map[].addActionListener(new ActionListener() 
+		{ 
+			public void mouseEntered(MouseEvent e) 
+			{ 
+				print(""+ tileNum+"");
+			} 
+		} );*/
+		
+		
+		
+		
 		
 		
 		//Settings for the window
 		screen.setVisible(false);
 		screen.setTitle("Puzzle Game...");
 		screen.setSize(576,456);
-		screen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		screen.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 	}
 
 	private void backgroundSetup()
@@ -76,43 +99,43 @@ public class Game {
 			background();
 			
 			if (i == 0){
-				map[tileNum] = new JButton(topImage);
+				map[i][gameX] = new JButton(topImage);
 			} else if (i == 12){
-				map[tileNum] = new JButton(bottomImage);
+				map[i][gameX] = new JButton(bottomImage);
 			} else if (backSelect <= 17){
-				map[tileNum] = new JButton(backgroundImageOne);
+				map[i][gameX] = new JButton(backgroundImageOne);
 			} else if (backSelect == 18){
-				map[tileNum] = new JButton(backgroundImageTwo);
+				map[i][gameX] = new JButton(backgroundImageTwo);
 			} else if (backSelect == 19){
-				map[tileNum] = new JButton(backgroundImageThree);
+				map[i][gameX] = new JButton(backgroundImageThree);
 			} else if (backSelect == 20){
-				map[tileNum] = new JButton(backgroundImageFour);
+				map[i][gameX] = new JButton(backgroundImageFour);
 			}
 		
-			map[tileNum].setMargin(new Insets(0,0,0,0));
-			map[tileNum].setBorder(null);
-			gamePanel.add(map[tileNum]);
-			tileNum++;
+			map[i][gameX].setMargin(new Insets(0,0,0,0));
+			map[i][gameX].setBorder(null);
+			gamePanel.add(map[i][gameX]);
+			//i = gameY;
 			
 			for (int j = 0; j<columns; j++){
 				background();
 				if (i == 0){
-					map[tileNum] = new JButton(topImage);
+					map[i][j] = new JButton(topImage);
 				} else if (i == 12){
-					map[tileNum] = new JButton(bottomImage);
+					map[i][j] = new JButton(bottomImage);
 				} else if (backSelect <= 17){
-					map[tileNum] = new JButton(backgroundImageOne);
+					map[i][j] = new JButton(backgroundImageOne);
 				} else if (backSelect == 18){
-					map[tileNum] = new JButton(backgroundImageTwo);
+					map[i][j] = new JButton(backgroundImageTwo);
 				} else if (backSelect == 19){
-					map[tileNum] = new JButton(backgroundImageThree);
+					map[i][j] = new JButton(backgroundImageThree);
 				} else if (backSelect == 20){
-					map[tileNum] = new JButton(backgroundImageFour);
+					map[i][j] = new JButton(backgroundImageFour);
 				}
-				map[tileNum].setMargin(new Insets(0,0,0,0));
-				map[tileNum].setBorder(null);
-				gamePanel.add(map[tileNum]);
-				tileNum++;
+				map[i][j].setMargin(new Insets(0,0,0,0));
+				map[i][j].setBorder(null);
+				gamePanel.add(map[i][j]);
+				gameX = j;
 			}
 		}
 	}
@@ -148,6 +171,13 @@ public class Game {
 		}
 	}
 	
+	private void levelSetup(){
+		
+		if (checkLevel == 0){
+			levelOne();
+		}
+	}
+	
 	
 	public void visible()
 	{
@@ -158,6 +188,19 @@ public class Game {
 	private void background()
 	{
 		backSelect = rnd.nextInt((20 - 0) + 1) + 0;
+	}
+	
+	private void levelOne()
+	{
+		map[0][2].setIcon(topLogImage);
+		map[2][2].setIcon(logImage);
+		map[2][4].setIcon(logImage);
+		map[5][4].setIcon(logImage);
+		map[5][5].setIcon(logImage);
+		map[8][5].setIcon(logImage);
+		map[10][5].setIcon(logImage);
+		map[10][7].setIcon(logImage);
+		map[12][7].setIcon(bottomLogImage);
 	}
 
 }
