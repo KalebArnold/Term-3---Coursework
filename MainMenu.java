@@ -21,7 +21,7 @@ public class MainMenu {
 		menuPanel.setLayout(mainLayout);
 		
 		//Setting text
-		title = new JLabel("Main Menu");
+		title = new JLabel("Main Menu", SwingConstants.CENTER);
 		play = new JButton("Play!");
 		leaderStats = new JButton("Leaderboard!");
 		
@@ -36,6 +36,7 @@ public class MainMenu {
 			public void actionPerformed(ActionEvent e) 
 			{ 
 				g.visible();
+				//g.drawBackground();
 			} 
 		} );
 		

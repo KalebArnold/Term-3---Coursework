@@ -3,7 +3,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.Random;
 
-public class Game {
+public class Game implements MouseListener{
 // variables and locals to this class
 	private int rows = 13;
 	private int columns = 9;
@@ -11,34 +11,26 @@ public class Game {
 	private int invColumns = 5;
 	private int gameX = 0;
 	private int gameY = 0;
-	private int invTileNum = 0;
-	private int backSelect = 0;
+	private int invX = 0;
+	private int backSelect = 0; //This is for the random for the background select.
 	private int checkLevel = 0;
 	
-	private JButton map[][] = new JButton[13][13];
-	private JButton inventory[] = new JButton[225];
+	private JButton map[][] = new JButton[13][9];
+	private JButton inventory[][] = new JButton[13][5];
+	
 	private JFrame screen;
 	private JPanel mainPanel;
 	private JPanel gamePanel;
 	private JPanel invPanel;
 	
 	private Random rnd = new Random();
+	private Graphics graph = new Graphics();
 
-//	Log variables
+	//Log variables
 	private boolean log = false;
 	private boolean longLog = false;
 	
-// Images for the game
-	private ImageIcon topImage = new ImageIcon("Images/bank2.jpg");
-	private ImageIcon bottomImage = new ImageIcon("Images/bank1.jpg");
-	private ImageIcon backgroundImageOne = new ImageIcon("Images/water1.jpg");
-	private ImageIcon backgroundImageTwo = new ImageIcon("Images/water2.jpg");
-	private ImageIcon backgroundImageThree = new ImageIcon("Images/water3.jpg");
-	private ImageIcon backgroundImageFour = new ImageIcon("Images/water4.jpg");
-	private ImageIcon logImage = new ImageIcon("Images/stump1.jpg");
-	private ImageIcon bottomLogImage = new ImageIcon("Images/stump2.jpg");
-	private ImageIcon topLogImage = new ImageIcon("Images/stump3.jpg");
-	
+	//private Timer timer;
 	
 	public Game(){
 		//Below is the decloration of the main components of the interface.
@@ -49,6 +41,8 @@ public class Game {
 		BorderLayout mainLayout = new BorderLayout();
 		GridLayout gameLayout = new GridLayout(rows,columns);
 		GridLayout invLayout = new GridLayout(invRows, invColumns);
+		
+		//timer = new Timer();
 		
 		
 		//Setting up the main components
@@ -66,32 +60,54 @@ public class Game {
 		inventorySetup();
 		levelSetup();
 		
-		
+		//JLabel score = new JLabel("Score: " + timer.getTime());
 		
 		//Tile print
-		
-		
-		
-		/*map[].addActionListener(new ActionListener() 
-		{ 
-			public void mouseEntered(MouseEvent e) 
-			{ 
-				print(""+ tileNum+"");
-			} 
-		} );*/
-		
-		
-		
-		
-		
 		
 		//Settings for the window
 		screen.setVisible(false);
 		screen.setTitle("Puzzle Game...");
 		screen.setSize(576,456);
 		screen.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		
+		for (int i = 0; i<rows; i++)
+		{
+			map[i][gameX].addMouseListener(this);
+			for (int j = 0; j<columns; j++)
+			{
+				map[i][j].addMouseListener(this);
+				gameX = j;
+			}
+			gameX = 0;
+		}
+		
+		
 	}
 
+	public void mousePressed(MouseEvent e)
+	{
+		if(e.getButton() == MouseEvent.BUTTON1)
+		{
+			if (e.getSource() == map[1][2])
+			{
+				//System.out.print("This works..");
+				if ((map[1][2].getIcon().equals(graph.getPlankH())))
+				{
+					System.out.println("Works!!!");
+					map[1][2].setIcon(graph.getWaterOne());
+				}
+			}
+		}
+	}
+	
+	
+	
+	public void mouseReleased(MouseEvent e){}
+	public void mouseEntered(MouseEvent e){}
+	public void mouseExited(MouseEvent e){}
+	public void mouseClicked(MouseEvent e){}
+	
+	
 	private void backgroundSetup()
 	{
 		for(int i = 0; i<rows; i++){
@@ -99,38 +115,35 @@ public class Game {
 			background();
 			
 			if (i == 0){
-				map[i][gameX] = new JButton(topImage);
+				map[i][gameX] = new JButton(graph.getTopBank());
 			} else if (i == 12){
-				map[i][gameX] = new JButton(bottomImage);
+				map[i][gameX] = new JButton(graph.getBottomBank());
 			} else if (backSelect <= 17){
-				map[i][gameX] = new JButton(backgroundImageOne);
+				map[i][gameX] = new JButton(graph.getWaterOne());
 			} else if (backSelect == 18){
-				map[i][gameX] = new JButton(backgroundImageTwo);
+				map[i][gameX] = new JButton(graph.getWaterTwo());
 			} else if (backSelect == 19){
-				map[i][gameX] = new JButton(backgroundImageThree);
+				map[i][gameX] = new JButton(graph.getWaterThree());
 			} else if (backSelect == 20){
-				map[i][gameX] = new JButton(backgroundImageFour);
+				map[i][gameX] = new JButton(graph.getWaterFour());
 			}
-		
 			map[i][gameX].setMargin(new Insets(0,0,0,0));
 			map[i][gameX].setBorder(null);
 			gamePanel.add(map[i][gameX]);
-			//i = gameY;
-			
 			for (int j = 0; j<columns; j++){
 				background();
 				if (i == 0){
-					map[i][j] = new JButton(topImage);
+					map[i][j] = new JButton(graph.getTopBank());
 				} else if (i == 12){
-					map[i][j] = new JButton(bottomImage);
+					map[i][j] = new JButton(graph.getBottomBank());
 				} else if (backSelect <= 17){
-					map[i][j] = new JButton(backgroundImageOne);
+					map[i][j] = new JButton(graph.getWaterOne());
 				} else if (backSelect == 18){
-					map[i][j] = new JButton(backgroundImageTwo);
+					map[i][j] = new JButton(graph.getWaterTwo());
 				} else if (backSelect == 19){
-					map[i][j] = new JButton(backgroundImageThree);
+					map[i][j] = new JButton(graph.getWaterThree());
 				} else if (backSelect == 20){
-					map[i][j] = new JButton(backgroundImageFour);
+					map[i][j] = new JButton(graph.getWaterFour());
 				}
 				map[i][j].setMargin(new Insets(0,0,0,0));
 				map[i][j].setBorder(null);
@@ -138,6 +151,7 @@ public class Game {
 				gameX = j;
 			}
 		}
+	gameX = 0;
 	}
 	
 	private void inventorySetup()
@@ -145,30 +159,31 @@ public class Game {
 		for(int i = 0; i<invRows; i++)
 		{
 			if (i == 0){
-				inventory[invTileNum] = new JButton(topImage);
+				inventory[i][invX] = new JButton(graph.getTopBank());
 			} else if (i == 12){
-				inventory[invTileNum] = new JButton(bottomImage);
+				inventory[i][invX] = new JButton(graph.getBottomBank());
 			} else {
-				inventory[invTileNum] = new JButton(backgroundImageOne);
+				inventory[i][invX] = new JButton(graph.getWaterOne());
 			}
-			inventory[invTileNum].setMargin(new Insets(0,0,0,0));
-			inventory[invTileNum].setBorder(null);
-			invPanel.add(inventory[invTileNum]);
-			invTileNum++;
+			inventory[i][invX].setMargin(new Insets(0,0,0,0));
+			inventory[i][invX].setBorder(null);
+			invPanel.add(inventory[i][invX]);
 			for(int j = 0; j<invColumns; j++){
 				if (i == 0){
-					inventory[invTileNum] = new JButton(topImage);
+					inventory[i][j] = new JButton(graph.getTopBank());
 				} else if (i == 12){
-					inventory[invTileNum] = new JButton(bottomImage);
+					inventory[i][j] = new JButton(graph.getBottomBank());
 				} else {
-					inventory[invTileNum] = new JButton(backgroundImageOne);
+					inventory[i][j] = new JButton(graph.getWaterOne());
 				}
-				inventory[invTileNum].setMargin(new Insets(0,0,0,0));
-				inventory[invTileNum].setBorder(null);
-				invPanel.add(inventory[invTileNum]);
-				invTileNum++;
+				inventory[i][j].setMargin(new Insets(0,0,0,0));
+				inventory[i][j].setBorder(null);
+				invPanel.add(inventory[i][j]);
+				invX = j;
 			}
+			
 		}
+	invX = 0;
 	}
 	
 	private void levelSetup(){
@@ -178,7 +193,10 @@ public class Game {
 		}
 	}
 	
-	
+	public void drawBackground()
+	{
+		backgroundSetup();
+	}
 	public void visible()
 	{
 		screen.setVisible(true);
@@ -192,7 +210,8 @@ public class Game {
 	
 	private void levelOne()
 	{
-		map[0][2].setIcon(topLogImage);
+	/*map[0][2].setIcon(topLogImage);
+		map[1][2].setIcon(plankOne);
 		map[2][2].setIcon(logImage);
 		map[2][4].setIcon(logImage);
 		map[5][4].setIcon(logImage);
@@ -201,6 +220,6 @@ public class Game {
 		map[10][5].setIcon(logImage);
 		map[10][7].setIcon(logImage);
 		map[12][7].setIcon(bottomLogImage);
-	}
+	*/}
 
 }
