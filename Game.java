@@ -8,15 +8,18 @@ public class Game implements MouseListener{
 	private int rows = 13;
 	private int columns = 9;
 	private int invRows = 13;
-	private int invColumns = 5;
+	private int invColumns = 4;
 	private int gameX = 0;
 	private int gameY = 0;
 	private int invX = 0;
 	private int backSelect = 0; //This is for the random for the background select.
 	private int checkLevel = 0;
+	private int difficulty = 0;
+	private int level = 0;
 	
-	private JButton map[][] = new JButton[13][9];
-	private JButton inventory[][] = new JButton[13][5];
+	
+	private JButton map[][] = new JButton[rows][columns];
+	private JButton inventory[][] = new JButton[invRows][invColumns];
 	
 	private JFrame screen;
 	private JPanel mainPanel;
@@ -43,17 +46,13 @@ public class Game implements MouseListener{
 		GridLayout invLayout = new GridLayout(invRows, invColumns);
 		
 		//timer = new Timer();
-		
-		
 		//Setting up the main components
 		screen.setContentPane(mainPanel);
 		mainPanel.setLayout(mainLayout);
 		gamePanel.setLayout(gameLayout);
 		invPanel.setLayout(invLayout);
-		
 		mainPanel.add("West", gamePanel);
 		mainPanel.add("East", invPanel);
-		
 		
 		//Setting tiles
 		backgroundSetup();
@@ -80,10 +79,7 @@ public class Game implements MouseListener{
 			}
 			gameX = 0;
 		}
-		
-		
 	}
-
 	public void mousePressed(MouseEvent e)
 	{
 		if(e.getButton() == MouseEvent.BUTTON1)
@@ -91,29 +87,28 @@ public class Game implements MouseListener{
 			if (e.getSource() == map[1][2])
 			{
 				//System.out.print("This works..");
-				if ((map[1][2].getIcon().equals(graph.getPlankH())))
+				if ((level == 0 && map[1][2].getIcon().equals(graph.getPlankH()) &&  map[2][2].getIcon().equals(graph.getStumpMan())))
 				{
 					System.out.println("Works!!!");
 					map[1][2].setIcon(graph.getWaterOne());
+					log(1,2);
 				}
+				/*if ((level == 1 && map[1][2].getIcon().equals(graph.getWaterOne()) &&  map[2][2].getIcon().equals(graph.getStumpMan())))
+					map[1][2].setIcon(graph.getPlankH());
+				}*/
 			}
 		}
 	}
-	
-	
 	
 	public void mouseReleased(MouseEvent e){}
 	public void mouseEntered(MouseEvent e){}
 	public void mouseExited(MouseEvent e){}
 	public void mouseClicked(MouseEvent e){}
 	
-	
 	private void backgroundSetup()
 	{
 		for(int i = 0; i<rows; i++){
-			
 			background();
-			
 			if (i == 0){
 				map[i][gameX] = new JButton(graph.getTopBank());
 			} else if (i == 12){
@@ -157,8 +152,14 @@ public class Game implements MouseListener{
 	private void inventorySetup()
 	{
 		for(int i = 0; i<invRows; i++)
-		{
-			if (i == 0){
+		{	
+			if (i > 0 && i < 12){
+				inventory[i][invX] = new JButton(graph.getPlankH());
+			} else if (i == 0 && invX == 0 ){
+				inventory[i][invX] = new JButton(graph.getTopStump());
+			} else if (i == 12 && invX == 0 ){
+				inventory[i][invX] = new JButton(graph.getBottomStump()); 
+			} else if (i == 0){
 				inventory[i][invX] = new JButton(graph.getTopBank());
 			} else if (i == 12){
 				inventory[i][invX] = new JButton(graph.getBottomBank());
@@ -181,9 +182,8 @@ public class Game implements MouseListener{
 				invPanel.add(inventory[i][j]);
 				invX = j;
 			}
-			
+		invX = 0;	
 		}
-	invX = 0;
 	}
 	
 	private void levelSetup(){
@@ -208,18 +208,63 @@ public class Game implements MouseListener{
 		backSelect = rnd.nextInt((20 - 0) + 1) + 0;
 	}
 	
+	private void placeLog()
+	{
+		
+	}
+	private void log(int x, int y)
+	{
+		if(log == false && longLog == false)
+		{
+			if(map[x][y].getIcon().equals(graph.getPlankH()))
+			{
+				if ((map[x+1][y].getIcon().equals(graph.getStumpMan()))||(map[x+2][y].getIcon().equals(graph.getStumpMan())))
+				{
+					System.out.print("This works!!!!!!!!!!!!");
+				}
+			}
+		}
+	}
+	
 	private void levelOne()
 	{
-	/*map[0][2].setIcon(topLogImage);
-		map[1][2].setIcon(plankOne);
-		map[2][2].setIcon(logImage);
-		map[2][4].setIcon(logImage);
-		map[5][4].setIcon(logImage);
-		map[5][5].setIcon(logImage);
-		map[8][5].setIcon(logImage);
-		map[10][5].setIcon(logImage);
-		map[10][7].setIcon(logImage);
-		map[12][7].setIcon(bottomLogImage);
-	*/}
-
+		map[0][2].setIcon(graph.getTopStump());
+		map[1][2].setIcon(graph.getPlankH());
+		map[2][2].setIcon(graph.getStump());
+		map[2][4].setIcon(graph.getStump());
+		map[5][4].setIcon(graph.getStump());
+		map[5][5].setIcon(graph.getStump());
+		map[8][5].setIcon(graph.getStump());
+		map[10][5].setIcon(graph.getStump());
+		map[10][7].setIcon(graph.getStump());
+		map[12][7].setIcon(graph.getBottomStumpMan());
+	}
+	private void levelTwo()
+	{
+		map[0][3].setIcon(graph.getTopStump());
+		map[1][2].setIcon(graph.getPlankV());
+		
+		map[2][2].setIcon(graph.getStump());
+		map[2][4].setIcon(graph.getStump());
+		map[5][4].setIcon(graph.getStump());
+		map[5][5].setIcon(graph.getStump());
+		map[8][5].setIcon(graph.getStump());
+		map[10][5].setIcon(graph.getStump());
+		map[10][7].setIcon(graph.getStump());
+		
+		map[12][3].setIcon(graph.getBottomStumpMan());
+	}
+	private void levelThree()
+	{
+		map[0][2].setIcon(graph.getTopStump());
+		map[1][2].setIcon(graph.getPlankH());
+		map[2][2].setIcon(graph.getStump());
+		map[2][4].setIcon(graph.getStump());
+		map[5][4].setIcon(graph.getStump());
+		map[5][5].setIcon(graph.getStump());
+		map[8][5].setIcon(graph.getStump());
+		map[10][5].setIcon(graph.getStump());
+		map[10][7].setIcon(graph.getStump());
+		map[12][7].setIcon(graph.getBottomStumpMan());
+	}
 }

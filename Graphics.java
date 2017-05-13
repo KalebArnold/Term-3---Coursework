@@ -12,7 +12,7 @@ public class Graphics{
 	private ImageIcon topStumpMan = new ImageIcon("Images/stump3_man.jpg");
 	private ImageIcon topStump = new ImageIcon("Images/stump3.jpg");
 	private ImageIcon bottomStumpMan = new ImageIcon("Images/stump2_man.jpg");
-	private ImageIcon bottomStump = new ImageIcon("Images/stump3_man.jpg");
+	private ImageIcon bottomStump = new ImageIcon("Images/stump2.jpg");
 	private ImageIcon stump = new ImageIcon("Images/stump1.jpg");
 	private ImageIcon stumpMan = new ImageIcon("Images/stump1_man.jpg");
 	//Planks
@@ -60,17 +60,17 @@ public class Graphics{
 	public ImageIcon getStumpMan(){
 		return stumpMan;
 	}
-	public ImageIcon getPlankH(){
-		return plankH;
-	}
-	public ImageIcon getPlankHMan(){
-		return plankHMan;
-	}
 	public ImageIcon getPlankV(){
 		return plankV;
 	}
 	public ImageIcon getPlankVMan(){
 		return plankVMan;
+	}
+	public ImageIcon getPlankH(){
+		return plankH;
+	}
+	public ImageIcon getPlankHMan(){
+		return plankHMan;
 	}
 	
 }
