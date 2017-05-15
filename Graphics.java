@@ -16,10 +16,10 @@ public class Graphics{
 	private ImageIcon stump = new ImageIcon("Images/stump1.jpg");
 	private ImageIcon stumpMan = new ImageIcon("Images/stump1_man.jpg");
 	//Planks
-	private ImageIcon plankH = new ImageIcon("Images/plank2.jpg");
-	private ImageIcon plankV = new ImageIcon("Images/plank1.jpg");
-	private ImageIcon plankHMan = new ImageIcon("Images/plank2_man.jpg");
-	private ImageIcon plankVMan = new ImageIcon("Images/plank1_man.jpg");
+	private ImageIcon plankH = new ImageIcon("Images/plank1.jpg");
+	private ImageIcon plankV = new ImageIcon("Images/plank2.jpg");
+	private ImageIcon plankHMan = new ImageIcon("Images/plank1_man.jpg");
+	private ImageIcon plankVMan = new ImageIcon("Images/plank2_man.jpg");
 	public Graphics(){
 		
 	}
