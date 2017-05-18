@@ -14,6 +14,7 @@ public class Level{
 	private String stump7;
 	// The plank positions
 	private String plank;
+	private String plankH;
 	private String longPlank1;
 	private String longPlank2; //two of these as we need to know co-ords of each 
 	
@@ -26,7 +27,7 @@ public class Level{
 	}
 	private void pickLevel()
 	{
-		levelPick = rand.nextInt(2) + 1;
+		levelPick = rand.nextInt(4) + 1;
 		if (levelPick == 1)
 		{
 			levelOne();
@@ -35,7 +36,7 @@ public class Level{
 		{
 			levelTwo();
 		}
-		/*else if (levelPick == 3)
+		else if (levelPick == 3)
 		{
 			levelThree();
 		}
@@ -43,7 +44,7 @@ public class Level{
 		{
 			levelFour();
 		}
-		else if (levelPick == 5)
+		/*else if (levelPick == 5)
 		{
 			levelFive();
 		}
@@ -64,6 +65,7 @@ public class Level{
 		stump7 = "0907";
 		bottomStump = "1207";
 		plank = "0507";
+		plankH = "NOTHING";
 		longPlank1 = "1107";
 		longPlank2 = "1007";
 	}
@@ -79,8 +81,41 @@ public class Level{
 		stump7 = "NOTHING";
 		bottomStump = "1203";
 		plank = "1103";
+		plankH = "NOTHING";
 		longPlank1 = "NOTHING";
 		longPlank2 = "NOTHING";
+	}
+	private void levelThree()
+	{
+		topStump = "0003";
+		stump1 = "0301";
+		stump2 = "0501";
+		stump3 = "0503";
+		stump4 = "0303";
+		stump5 = "0903";
+		stump6 = "0901";
+		stump7 = "0603";
+		bottomStump = "1201";
+		plank = "NOTHING";
+		plankH = "0902";
+		longPlank1 = "1101";
+		longPlank2 = "1001";
+	}
+	private void levelFour()
+	{
+		topStump = "0004";
+		stump1 = "0304";
+		stump2 = "0302";
+		stump3 = "0502";
+		stump4 = "0305";
+		stump5 = "0605";
+		stump6 = "0603";
+		stump7 = "0903";
+		bottomStump = "1203";
+		plank = "NOTHING";
+		plankH = "0604";
+		longPlank1 = "1103";
+		longPlank2 = "1003";
 	}
 	public String getTopStump()
 	{
@@ -121,6 +156,10 @@ public class Level{
 	public String getPlank()
 	{
 		return plank;
+	}
+	public String getPlankH()
+	{
+		return plankH;
 	}
 	public String getLongPlank1()
 	{

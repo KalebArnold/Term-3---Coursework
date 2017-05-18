@@ -29,6 +29,7 @@ public class Game implements MouseListener{
 	private int mapY = 0;
 	private int playerX = 0;
 	private int playerY = 0;
+	private boolean playerCheck = false;
 	
 	private JButton map[][] = new JButton[rows][columns];
 	private JButton inventory[][] = new JButton[invRows][invColumns];
@@ -79,17 +80,6 @@ public class Game implements MouseListener{
 		screen.setTitle("Puzzle Game...");
 		screen.setSize(((16*32)-16),(rows*32));
 		screen.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		
-	/*	for (int i = 0; i<rows; i++)
-		{
-			map[i][gameX].addMouseListener(this);
-			for (int j = 0; j<columns; j++)
-			{
-				map[i][j].addMouseListener(this);
-				gameX = j;
-			}
-			gameX = 0;
-		}*/
 		
 	}
 	
@@ -276,8 +266,12 @@ public class Game implements MouseListener{
 				
 				}
 			}
-			System.out.println("Final: X:" + mapX + " Y:"+ mapY);
-			
+			if (playerCheck == false)
+			{
+				playerUpdate();
+				playerCheck = true;
+			}
+			System.out.println("Player X:" +playerX+ " Y:" +playerY);
 			//Vertical check for movement.
 			if ((map[mapX][mapY].getIcon().equals(graph.getPlankV())) || (map[mapX][mapY].getIcon().equals(graph.getBottomStump())) || (map[mapX][mapY].getIcon().equals(graph.getStump())) || (map[mapX][mapY].getIcon().equals(graph.getTopStump())))
 			{
@@ -290,7 +284,6 @@ public class Game implements MouseListener{
 						}
 						if (map[playerX][playerY].getIcon().equals(graph.getTopStumpMan())){
 							map[playerX][playerY].setIcon(graph.getTopStump());
-							levelComplete();
 						}
 						if (map[playerX][playerY].getIcon().equals(graph.getStumpMan())){
 							map[playerX][playerY].setIcon(graph.getStump());
@@ -590,7 +583,7 @@ public class Game implements MouseListener{
 		int x = 0;
 		int y = 0;
 		String get = "";
-		for (int i = 0; i < 12; i++)
+		for (int i = 0; i < 13; i++)
 		{
 			
 			if (i == 0)//Top Stump
@@ -644,17 +637,27 @@ public class Game implements MouseListener{
 					playerX = x;
 					playerY = y;
 					map[x][y].setIcon(graph.getBottomStumpMan());
+					System.out.println("Player Updated X:" + playerX + " Y:" + playerY);
 				}
 				
 			}
-			else if (i >= 9)
+			else if (i >= 9)//Plank
 			{
 				if (i == 9){get = (lvl.getPlank());}
-				else if (i == 10){get = (lvl.getLongPlank1());}
-				else if (i == 11){get = (lvl.getLongPlank2());}
+				else if (i == 10){get = (lvl.getPlankH());}
+				else if (i == 11){get = (lvl.getLongPlank1());}
+				else if (i == 12){get = (lvl.getLongPlank2());}
 					if (get.equals("NOTHING"))
 					{
 						
+					}
+					else if (i == 10)
+					{
+						String numberA = new String(get.substring(0, 2));
+						String numberB = new String(get.substring(2));
+						x = Integer.parseInt(numberA);
+						y = Integer.parseInt(numberB);
+						map[x][y].setIcon(graph.getPlankH());
 					}
 					else
 					{
@@ -669,19 +672,75 @@ public class Game implements MouseListener{
 		}
 		
 	}
+	
+	public void getDifficulty(int lvl) // This gets the difficulty from the button clicked in the main menu.
+	{
+		difficulty = lvl;
+	}
+	
+	private void nextLevel()
+	{
+		backgroundRefresh();
+		getLevel();
+	}
+	
+	private void playerUpdate()
+	{
+		for (int i = 0; i > columns; i++)
+		{
+			if ((map[i][12].getIcon().equals(graph.getBottomStump())) || (map[i][12].getIcon().equals(graph.getBottomStumpMan())))
+			{
+				System.out.println("Position of the player is X:"+i+ "Y: 12");
+				playerX = 12;
+				playerY = i;
+			}
+		}
+		String get = new String(lvl.getBottomStump());
+		String numberA = new String(get.substring(0, 2));
+		String numberB = new String(get.substring(2));
+		int x = Integer.parseInt(numberA);
+		int y = Integer.parseInt(numberB);
+		playerX = x;
+		playerY = y;
+		System.out.println("Player Updated X:" + playerX + " Y:" + playerY);
+		
+	}
+	
 	private void levelComplete()
 	{
 		
 		if (difficulty == 1){
-			
+			System.out.println("Finished easy!");
 		} 
 		else if(difficulty == 2)
 		{
-			
+			if (level == 3)
+			{
+				System.out.println("Finished medium!");
+			}
+			else 
+			{
+				level++;
+				nextLevel();
+			}
 		}
 		else if (difficulty == 3)
 		{
-			
+			if (level == 6)
+			{
+				System.out.println("Finished hard!");
+			}
+			else 
+			{
+				level++;
+				System.out.println(level + "/6");
+				backgroundRefresh();
+				getLevel();
+				playerX = 12;
+				playerY = 1;
+				playerUpdate();
+				playerCheck = false;
+			}
 		}
 	}
 }
