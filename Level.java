@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Level{
 	//Top and Borrom Stumps
 	private String topStump;
@@ -16,6 +18,7 @@ public class Level{
 	private String longPlank2; //two of these as we need to know co-ords of each 
 	
 	private int levelPick = 0;
+	private Random rand = new Random();
 	
 	public void newLevel()
 	{
@@ -23,26 +26,61 @@ public class Level{
 	}
 	private void pickLevel()
 	{
-		if (levelPick == 0)
+		levelPick = rand.nextInt(2) + 1;
+		if (levelPick == 1)
 		{
 			levelOne();
 		}
-		
+		else if (levelPick == 2)
+		{
+			levelTwo();
+		}
+		/*else if (levelPick == 3)
+		{
+			levelThree();
+		}
+		else if (levelPick == 4)
+		{
+			levelFour();
+		}
+		else if (levelPick == 5)
+		{
+			levelFive();
+		}
+		else if (levelPick == 6)
+		{
+			levelSix();
+		}*/
 	}
 	private void levelOne()
 	{
-		topStump = "0002";
-		stump1 = "0202";
-		stump2 = "0204";
-		stump3 = "0504";
-		stump4 = "0505";
-		stump5 = "0805";
-		stump6 = "1005";
-		stump7 = "1007";
+		topStump = "0003";
+		stump1 = "0203";
+		stump2 = "0205";
+		stump3 = "0207";
+		stump4 = "0407";
+		stump5 = "0607";
+		stump6 = "0405";
+		stump7 = "0907";
 		bottomStump = "1207";
-		plank = "1107";
-		longPlank1 = "0705";
-		longPlank2 = "0605";
+		plank = "0507";
+		longPlank1 = "1107";
+		longPlank2 = "1007";
+	}
+	private void levelTwo()
+	{
+		topStump = "0003";
+		stump1 = "0203";
+		stump2 = "0403";
+		stump3 = "0603";
+		stump4 = "0803";
+		stump5 = "1003";
+		stump6 = "0405";
+		stump7 = "NOTHING";
+		bottomStump = "1203";
+		plank = "1103";
+		longPlank1 = "NOTHING";
+		longPlank2 = "NOTHING";
 	}
 	public String getTopStump()
 	{

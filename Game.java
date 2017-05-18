@@ -5,6 +5,15 @@ import java.util.Random;
 
 public class Game implements MouseListener{
 // variables and locals to this class
+/**
+* This class is the main game class:
+* Player Movement, Plank Placing, Level loading, Inventory Update.
+* Declaring variables
+* Including: 
+* - Array for the map and inventory
+* - Player postions
+* - Level stats and all the Swing variables
+**/
 	private int rows = 13;
 	private int columns = 9;
 	private int invRows = 13;
@@ -14,13 +23,12 @@ public class Game implements MouseListener{
 	private int invX = 0;
 	private int backSelect = 0; //This is for the random for the background select.
 	private int checkLevel = 0;
-	private int difficulty = 0;
-	private int level = 0;
+	private int difficulty = 0; //Easy = 1; Medium = 2; Hard = 3
+	private int level = 0;// Easy = 1 Levels; Medium = 3 Levels; Hard = 6
 	private int mapX = 0;
 	private int mapY = 0;
 	private int playerX = 0;
 	private int playerY = 0;
-	
 	
 	private JButton map[][] = new JButton[rows][columns];
 	private JButton inventory[][] = new JButton[invRows][invColumns];
@@ -62,7 +70,7 @@ public class Game implements MouseListener{
 		//Setting tiles
 		backgroundSetup();
 		inventorySetup();
-		getLevel();
+		
 		
 		//JLabel score = new JLabel("Score: " + timer.getTime());
 		
@@ -72,7 +80,7 @@ public class Game implements MouseListener{
 		screen.setSize(((16*32)-16),(rows*32));
 		screen.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		
-		for (int i = 0; i<rows; i++)
+	/*	for (int i = 0; i<rows; i++)
 		{
 			map[i][gameX].addMouseListener(this);
 			for (int j = 0; j<columns; j++)
@@ -81,7 +89,7 @@ public class Game implements MouseListener{
 				gameX = j;
 			}
 			gameX = 0;
-		}
+		}*/
 		
 	}
 	
@@ -89,36 +97,173 @@ public class Game implements MouseListener{
 	{
 		if(e.getButton() == MouseEvent.BUTTON3)
 		{
-			if (e.getSource() == map[1][2])
-			{
-				if ((map[1][2].getIcon().equals(graph.getPlankV())))
-				{
-					System.out.println("Works!!!");
-					log(1,2);
-					invUpdate();
-				}				
-			}
-			if (e.getSource() == map[11][7])
-			{
-				if ((map[11][7].getIcon().equals(graph.getPlankV()))){
-					if ((map[12][7].getIcon().equals(graph.getBottomStumpMan())))
-					{
-						map[11][7].setIcon(graph.getWaterOne());
-						System.out.print("A: working!");
-						log = true;
-						invUpdate();
+			for(int i=0; i <= (rows-1); i++){
+				for (int j=0; j <= (columns-1); j++){
+					if (e.getSource() == map[i][j]){
+						mapX = i;
+						mapY = j;
 					}
-				} else if (log == true)
+				
+				}
+			}
+			//Picking up in a vertical position
+			if (map[mapX][mapY].getIcon().equals(graph.getPlankV()))
+			{
+				if (!log && !longLog)
 				{
-					if (map[11][7].getIcon().equals(graph.getWaterOne()))
+					if (playerX == (mapX+1) && (map[mapX][mapY].getIcon().equals(graph.getPlankV()))&& (map[mapX-1][mapY].getIcon().equals(graph.getPlankV())))
+					{					
+						if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan())))
+						{
+							map[mapX][mapY].setIcon(graph.getWaterOne());
+							map[mapX-1][mapY].setIcon(graph.getWaterOne());
+							longLog = true;
+							invUpdate();
+						}	
+					} 
+					else if (playerX == (mapX-1) && (map[mapX][mapY].getIcon().equals(graph.getPlankV()))&& (map[mapX+1][mapY].getIcon().equals(graph.getPlankV())))
+					{					
+						if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan())))
+						{
+							map[mapX][mapY].setIcon(graph.getWaterOne());
+							map[mapX+1][mapY].setIcon(graph.getWaterOne());
+							longLog = true;
+							invUpdate();
+						}	
+					} 
+					else if (playerX == (mapX+1) || playerX == (mapX-1))
+					{					
+						if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan())))
+						{
+							map[mapX][mapY].setIcon(graph.getWaterOne());
+							log = true;
+							invUpdate();
+						}	
+					} 
+				}
+				//Placing in a vertical position
+			} else if ((map[mapX][mapY].getIcon().equals(graph.getWaterOne())) || (map[mapX][mapY].getIcon().equals(graph.getWaterTwo())) || (map[mapX][mapY].getIcon().equals(graph.getWaterThree())) || (map[mapX][mapY].getIcon().equals(graph.getWaterFour())))
+			{	
+				if (log){
+					if (playerX == (mapX-1) && playerX <= 10 && mapY == playerY)
 					{
-						log = false;
-						map[11][7].setIcon(graph.getPlankV());
-						invUpdate();
+						if ((map[playerX+2][playerY].getIcon().equals(graph.getStump())) || (map[playerX+2][playerY].getIcon().equals(graph.getTopStump())) || (map[playerX+2][playerY].getIcon().equals(graph.getBottomStump())))
+						{
+							if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan()))){
+								placeLogV(playerX+1, mapY, 0);
+							}
+						}
+					}else if (playerX == (mapX+1) && playerX >= 1 && mapY == playerY)
+					{
+						if ((map[playerX-2][playerY].getIcon().equals(graph.getStump())) || (map[playerX-2][playerY].getIcon().equals(graph.getTopStump())) || (map[playerX-2][playerY].getIcon().equals(graph.getBottomStump())))
+						{
+							if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan()))){
+								placeLogV(playerX-1, mapY, 0);
+							}
+						}
+					}
+				}
+				if (longLog){
+					if (playerX == (mapX-1) && playerX <= 9 && mapY == playerY)
+					{
+						if ((map[playerX+3][playerY].getIcon().equals(graph.getStump())) || (map[playerX+3][playerY].getIcon().equals(graph.getTopStump())) || (map[playerX+3][playerY].getIcon().equals(graph.getBottomStump())))
+						{
+							if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan()))){
+								placeLogV(playerX+1, mapY, 2);
+							}
+						}
+					}else if (playerX == (mapX+1) && playerX > 2 && mapY == playerY)
+					{
+						if ((map[playerX-3][playerY].getIcon().equals(graph.getStump())) || (map[playerX-3][playerY].getIcon().equals(graph.getTopStump())) || (map[playerX-3][playerY].getIcon().equals(graph.getBottomStump())))
+						{
+							if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan()))){
+								placeLogV(playerX-1, mapY, 1);
+							}
+						}
 					}
 				}
 			}
-		}
+			// Picking up planks in a horizontal position
+			if (map[mapX][mapY].getIcon().equals(graph.getPlankH()))
+			{
+				if (!log && !longLog)
+				{
+					if (playerX == (mapY+1) && (map[mapX][mapY].getIcon().equals(graph.getPlankV()))&& (map[mapY-1][mapY].getIcon().equals(graph.getPlankV())))
+					{					
+						if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan())))
+						{
+							map[mapX][mapY].setIcon(graph.getWaterOne());
+							map[mapX][mapY-1].setIcon(graph.getWaterOne());
+							longLog = true;
+							invUpdate();
+						}	
+					} 
+					else if (playerX == (mapX-1) && (map[mapX][mapY].getIcon().equals(graph.getPlankV()))&& (map[mapX+1][mapY].getIcon().equals(graph.getPlankV())))
+					{					
+						if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan())))
+						{
+							map[mapX][mapY].setIcon(graph.getWaterOne());
+							map[mapX][mapY+1].setIcon(graph.getWaterOne());
+							longLog = true;
+							invUpdate();
+						}	
+					}
+					else if (playerY == (mapY+1) || playerY == (mapY-1))
+					{
+						if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan()))){
+							map[mapX][mapY].setIcon(graph.getWaterOne());
+							System.out.print("A: working!");
+							log = true;
+							invUpdate();
+						}
+					} 
+				}	
+			} 
+			// Placing planks in a horizontal position
+			else if ((map[mapX][mapY].getIcon().equals(graph.getWaterOne())) || (map[mapX][mapY].getIcon().equals(graph.getWaterTwo())) || (map[mapX][mapY].getIcon().equals(graph.getWaterThree())) || (map[mapX][mapY].getIcon().equals(graph.getWaterFour())))
+			{
+				if (log && !longLog)
+				{
+					if (playerY == (mapY-1) && playerY <= 12 && mapX == playerX)
+					{
+						if ((map[playerX][playerY+2].getIcon().equals(graph.getStump())) || (map[playerX][playerY+2].getIcon().equals(graph.getTopStump())) || (map[playerX][playerY+2].getIcon().equals(graph.getBottomStump())))
+						{
+							if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan()))){
+								placeLogH(mapX, playerY+1, 2);
+							}
+						}
+					} 
+					else if (playerY == (mapY+1) && playerY >= 1 && mapX == playerX)
+					{
+						if ((map[playerX][playerY-2].getIcon().equals(graph.getStump())) || (map[playerX][playerY-2].getIcon().equals(graph.getTopStump())) || (map[playerX][playerY-2].getIcon().equals(graph.getBottomStump())))
+						{
+							if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan()))){
+								placeLogH(mapX, playerY-1, 1);
+							}
+						}
+					}
+				}
+				if (longLog){
+					if (playerY == (mapY-1) && playerY <= 12 && mapX == playerX)
+					{
+						if ((map[playerX][playerY+3].getIcon().equals(graph.getStump())) || (map[playerX][playerY+3].getIcon().equals(graph.getTopStump())) || (map[playerX][playerY+3].getIcon().equals(graph.getBottomStump())))
+						{
+							if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan()))){
+								placeLogH(mapX, playerY+1, 1);
+							}
+						}
+					}else if (playerY == (mapY+1) && playerY >= 1 && mapX == playerX)
+					{
+						if ((map[playerX][playerY-3].getIcon().equals(graph.getStump())) || (map[playerX][playerY-3].getIcon().equals(graph.getTopStump())) || (map[playerX][playerY-3].getIcon().equals(graph.getBottomStump())))
+						{
+							if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan()))){
+								placeLogH(mapX, playerY-1, 2);
+							}
+						}
+					}
+				}
+			}
+	}
 		if (e.getButton() == MouseEvent.BUTTON1)
 		{
 			for(int i=0; i <= (rows-1); i++){
@@ -133,51 +278,89 @@ public class Game implements MouseListener{
 			}
 			System.out.println("Final: X:" + mapX + " Y:"+ mapY);
 			
-			
-			if (map[mapX][mapY].getIcon().equals(graph.getPlankV()))
+			//Vertical check for movement.
+			if ((map[mapX][mapY].getIcon().equals(graph.getPlankV())) || (map[mapX][mapY].getIcon().equals(graph.getBottomStump())) || (map[mapX][mapY].getIcon().equals(graph.getStump())) || (map[mapX][mapY].getIcon().equals(graph.getTopStump())))
 			{
 				if (playerX == (mapX+1) || playerX == (mapX-1))
 				{
-					if (map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())){
-						map[playerX][playerY].setIcon(graph.getBottomStump());
+					if (playerY == mapY)
+					{
+						if (map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())){
+							map[playerX][playerY].setIcon(graph.getBottomStump());
+						}
+						if (map[playerX][playerY].getIcon().equals(graph.getTopStumpMan())){
+							map[playerX][playerY].setIcon(graph.getTopStump());
+							levelComplete();
+						}
+						if (map[playerX][playerY].getIcon().equals(graph.getStumpMan())){
+							map[playerX][playerY].setIcon(graph.getStump());
+						}
+						if (map[playerX][playerY].getIcon().equals(graph.getPlankVMan())){
+							map[playerX][playerY].setIcon(graph.getPlankV());
+						}
+						if (map[mapX][mapY].getIcon().equals(graph.getPlankV()))
+						{
+							map[mapX][mapY].setIcon(graph.getPlankVMan());
+						}
+						if (map[mapX][mapY].getIcon().equals(graph.getBottomStump()))
+						{
+							map[mapX][mapY].setIcon(graph.getBottomStumpMan());
+						}
+						if (map[mapX][mapY].getIcon().equals(graph.getStump()))
+						{
+							map[mapX][mapY].setIcon(graph.getStumpMan());
+						}
+						if (map[mapX][mapY].getIcon().equals(graph.getTopStump()))
+						{
+							map[mapX][mapY].setIcon(graph.getTopStumpMan());
+							levelComplete();
+						}
+						
+						playerX = mapX;
+						playerY = mapY;
 					}
-					if (map[playerX][playerY].getIcon().equals(graph.getTopStumpMan())){
-						map[playerX][playerY].setIcon(graph.getTopStump());
-					}
-					if (map[playerX][playerY].getIcon().equals(graph.getStumpMan())){
-						map[playerX][playerY].setIcon(graph.getStump());
-					}
-					if (map[playerX][playerY].getIcon().equals(graph.getPlankVMan())){
-						map[playerX][playerY].setIcon(graph.getPlankV());
-					}
-					map[mapX][mapY].setIcon(graph.getPlankVMan());
-					playerX = mapX;
-					playerY = mapY;
-				} 
-				
-			}
-			if (map[mapX][mapY].getIcon().equals(graph.getStump()))
+				}  
+			}			
+			//Horisontal check for movement.
+			if ((map[mapX][mapY].getIcon().equals(graph.getPlankH())) || (map[mapX][mapY].getIcon().equals(graph.getBottomStump())) || (map[mapX][mapY].getIcon().equals(graph.getStump())) || (map[mapX][mapY].getIcon().equals(graph.getTopStump())))
 			{
-				if (playerX == (mapX+1) || playerX == (mapX-1))
+				if (playerY == (mapY+1) || playerY == (mapY-1))
 				{
-					if (map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())){
-						map[playerX][playerY].setIcon(graph.getBottomStump());
+					if (playerX == mapX)
+					{
+						if (map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())){
+							map[playerX][playerY].setIcon(graph.getBottomStump());
+						}
+						if (map[playerX][playerY].getIcon().equals(graph.getTopStumpMan())){
+							map[playerX][playerY].setIcon(graph.getTopStump());
+						}
+						if (map[playerX][playerY].getIcon().equals(graph.getStumpMan())){
+							map[playerX][playerY].setIcon(graph.getStump());
+						}
+						if (map[playerX][playerY].getIcon().equals(graph.getPlankHMan())){
+							map[playerX][playerY].setIcon(graph.getPlankH());
+						}
+						if (map[mapX][mapY].getIcon().equals(graph.getPlankH()))
+						{
+							map[mapX][mapY].setIcon(graph.getPlankHMan());
+						}
+						if (map[mapX][mapY].getIcon().equals(graph.getBottomStump()))
+						{
+							map[mapX][mapY].setIcon(graph.getBottomStumpMan());
+						}
+						if (map[mapX][mapY].getIcon().equals(graph.getStump()))
+						{
+							map[mapX][mapY].setIcon(graph.getStumpMan());
+						}
+						if (map[mapX][mapY].getIcon().equals(graph.getTopStump()))
+						{
+							map[mapX][mapY].setIcon(graph.getTopStumpMan());
+						}
+						playerX = mapX;
+						playerY = mapY;
 					}
-					if (map[playerX][playerY].getIcon().equals(graph.getTopStumpMan())){
-						map[playerX][playerY].setIcon(graph.getTopStump());
-					}
-					if (map[playerX][playerY].getIcon().equals(graph.getStumpMan())){
-						map[playerX][playerY].setIcon(graph.getStump());
-					}
-					if (map[playerX][playerY].getIcon().equals(graph.getPlankVMan())){
-						map[playerX][playerY].setIcon(graph.getPlankV());
-					}
-					map[mapX][mapY].setIcon(graph.getStumpMan());
-					playerX = mapX;
-					playerY = mapY;
 				} 
-				
-			}
+			}		
 		}
 		
 	}
@@ -207,6 +390,7 @@ public class Game implements MouseListener{
 			map[i][gameX].setMargin(new Insets(0,0,0,0));
 			map[i][gameX].setBorder(null);
 			gamePanel.add(map[i][gameX]);
+			map[i][gameX].addMouseListener(this);
 			for (int j = 0; j<columns; j++){
 				background();
 				if (i == 0){
@@ -225,10 +409,51 @@ public class Game implements MouseListener{
 				map[i][j].setMargin(new Insets(0,0,0,0));
 				map[i][j].setBorder(null);
 				gamePanel.add(map[i][j]);
+				map[i][j].addMouseListener(this);
 				gameX = j;
 			}
 		}
 	gameX = 0;
+	}
+	
+	private void backgroundRefresh()
+	{
+		for(int i = 0; i<rows; i++){
+			background();
+			if (i == 0 ){
+				map[i][gameX].setIcon(graph.getTopBank());
+			} 
+			else if (i == 12)
+			{
+				map[i][gameX].setIcon(graph.getBottomBank());
+			} else if (backSelect <= 17){
+				map[i][gameX].setIcon(graph.getWaterOne());
+			} else if (backSelect == 18){
+				map[i][gameX].setIcon(graph.getWaterTwo());
+			} else if (backSelect == 19){
+				map[i][gameX].setIcon(graph.getWaterThree());
+			} else if (backSelect == 20){
+				map[i][gameX].setIcon(graph.getWaterFour());
+			}
+			for (int j = 0; j<columns; j++){
+				background();
+				if (i == 0){
+					map[i][j].setIcon(graph.getTopBank());
+				} else if (i == 12){
+					map[i][j].setIcon(graph.getBottomBank());
+				} else if (backSelect <= 17){
+					map[i][j].setIcon(graph.getWaterOne());
+				} else if (backSelect == 18){
+					map[i][j].setIcon(graph.getWaterTwo());
+				} else if (backSelect == 19){
+					map[i][j].setIcon(graph.getWaterThree());
+				} else if (backSelect == 20){
+					map[i][j].setIcon(graph.getWaterFour());
+				}
+				gameX = j;
+			}
+		}
+		gameX = 0;
 	}
 	
 	private void inventorySetup()
@@ -275,7 +500,8 @@ public class Game implements MouseListener{
 	public void visible()
 	{
 		screen.setVisible(true);
-		
+		backgroundRefresh();
+		getLevel();
 	}
 	
 	private void background()
@@ -283,8 +509,60 @@ public class Game implements MouseListener{
 		backSelect = rnd.nextInt((20 - 0) + 1) + 0;
 	}
 	
-	private void placeLog()
+	private void placeLogV(int x, int y, int left)
 	{
+		if (log)
+		{
+			map[x][y].setIcon(graph.getPlankV());
+			log = false;
+			invUpdate();
+		}
+		if (longLog)
+		{
+			map[x][y].setIcon(graph.getPlankV());
+			// left 1 means that it's going left
+			if (left == 1)
+			{;
+				map[x-1][y].setIcon(graph.getPlankV());
+				longLog = false;
+				invUpdate();
+			}
+			// left 2 means that it's going right
+			if (left == 2)
+			{
+				map[x+1][y].setIcon(graph.getPlankV());
+				longLog = false;
+				invUpdate();
+			}
+		}
+		
+	}
+	private void placeLogH(int x, int y, int down)
+	{
+		if (log)
+		{
+			map[x][y].setIcon(graph.getPlankH());
+			log = false;
+			invUpdate();
+		}
+		if (longLog)
+		{
+			map[x][y].setIcon(graph.getPlankH());
+			// down 1 means that it's going down
+			if (down == 1)
+			{
+				map[x][y+1].setIcon(graph.getPlankH());
+				longLog = false;
+				invUpdate();
+			}
+			// down 2 means that it's going down
+			if (down == 2)
+			{
+				map[x][y-1].setIcon(graph.getPlankH());
+				longLog = false;
+				invUpdate();
+			}
+		}
 		
 	}
 	
@@ -306,29 +584,6 @@ public class Game implements MouseListener{
 		}
 	}
 	
-	private void log(int x, int y)
-	{
-		if(log == false && longLog == false)
-		{
-			if(map[x][y].getIcon().equals(graph.getPlankV()))
-			{
-				if ((map[x+1][y].getIcon().equals(graph.getStumpMan()))||(map[x+2][y].getIcon().equals(graph.getStumpMan())))
-				{
-					System.out.print("This works!!!!!!!!!!!!");
-				}/* else if ((map[x+1][y].getIcon().equals(graph.getBottomStumpMan())))
-				{
-					
-				}	*/
-			} else if (map[x][y].getIcon().equals(graph.getPlankH()))
-			{
-				if ((map[x][y+1].getIcon().equals(graph.getPlankH()))||(map[x][y-1].getIcon().equals(graph.getPlankH())))
-				{
-					invUpdate();
-					map[x][y].setIcon(graph.getWaterOne());
-				}
-			}
-		}
-	}
 	private void getLevel()
 	{
 		lvl.newLevel();
@@ -341,11 +596,15 @@ public class Game implements MouseListener{
 			if (i == 0)//Top Stump
 			{
 			get = (lvl.getTopStump());
-			String numberA = new String(get.substring(0, 2));
-			String numberB = new String(get.substring(2));
-			x = Integer.parseInt(numberA);
-			y = Integer.parseInt(numberB);
-			map[x][y].setIcon(graph.getTopStump());
+				if (get.equals("NOTHING")){
+					
+				} else {
+					String numberA = new String(get.substring(0, 2));
+					String numberB = new String(get.substring(2));
+					x = Integer.parseInt(numberA);
+					y = Integer.parseInt(numberB);
+					map[x][y].setIcon(graph.getTopStump());
+				}
 			} 
 			else if (i >= 1 && i <= 7 ) //Middle stumps
 			{
@@ -357,33 +616,55 @@ public class Game implements MouseListener{
 				else if (i == 6){get = (lvl.getStumpSix());}
 				else if (i == 7){get = (lvl.getStumpSeven());}
 				else {get = (lvl.getStumpFour());}
-				String numberA = new String(get.substring(0, 2));
-				String numberB = new String(get.substring(2));
-				x = Integer.parseInt(numberA);
-				y = Integer.parseInt(numberB);
-				map[x][y].setIcon(graph.getStump());
+				if (get.equals("NOTHING")){
+				
+				}
+				else
+				{
+					String numberA = new String(get.substring(0, 2));
+					String numberB = new String(get.substring(2));
+					x = Integer.parseInt(numberA);
+					y = Integer.parseInt(numberB);
+					map[x][y].setIcon(graph.getStump());	
+				}
+				
 			} 
 			else if (i == 8)//Bottom Stumps
 			{
 				get = (lvl.getBottomStump());
-				String numberA = new String(get.substring(0, 2));
-				String numberB = new String(get.substring(2));
-				x = Integer.parseInt(numberA);
-				y = Integer.parseInt(numberB);
-				playerX = x;
-				playerY = y;
-				map[x][y].setIcon(graph.getBottomStumpMan());
+				if (get.equals("NOTHING"))
+				{
+				}
+				else
+				{
+					String numberA = new String(get.substring(0, 2));
+					String numberB = new String(get.substring(2));
+					x = Integer.parseInt(numberA);
+					y = Integer.parseInt(numberB);
+					playerX = x;
+					playerY = y;
+					map[x][y].setIcon(graph.getBottomStumpMan());
+				}
+				
 			}
 			else if (i >= 9)
 			{
 				if (i == 9){get = (lvl.getPlank());}
 				else if (i == 10){get = (lvl.getLongPlank1());}
 				else if (i == 11){get = (lvl.getLongPlank2());}
-				String numberA = new String(get.substring(0, 2));
-				String numberB = new String(get.substring(2));
-				x = Integer.parseInt(numberA);
-				y = Integer.parseInt(numberB);
-				map[x][y].setIcon(graph.getPlankV());
+					if (get.equals("NOTHING"))
+					{
+						
+					}
+					else
+					{
+						String numberA = new String(get.substring(0, 2));
+						String numberB = new String(get.substring(2));
+						x = Integer.parseInt(numberA);
+						y = Integer.parseInt(numberB);
+						map[x][y].setIcon(graph.getPlankV());
+					}
+				
 			}
 		}
 		
@@ -391,5 +672,16 @@ public class Game implements MouseListener{
 	private void levelComplete()
 	{
 		
+		if (difficulty == 1){
+			
+		} 
+		else if(difficulty == 2)
+		{
+			
+		}
+		else if (difficulty == 3)
+		{
+			
+		}
 	}
 }
