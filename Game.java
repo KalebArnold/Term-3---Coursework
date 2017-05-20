@@ -38,6 +38,11 @@ public class Game implements MouseListener{
 	private JPanel mainPanel;
 	private JPanel gamePanel;
 	private JPanel invPanel;
+	private JPanel textPanel;
+	private JLabel timeLabel;
+	private JLabel levelLabel;
+	private JLabel difLabel;
+	private JLabel bestTime;
 	
 	private Random rnd = new Random();
 	private Graphics graph = new Graphics();
@@ -55,18 +60,34 @@ public class Game implements MouseListener{
 		gamePanel = new JPanel();
 		mainPanel = new JPanel();
 		invPanel = new JPanel();
+		textPanel = new JPanel();
 		BorderLayout mainLayout = new BorderLayout();
 		GridLayout gameLayout = new GridLayout(rows,columns);
 		GridLayout invLayout = new GridLayout(invRows, invColumns);
+		GridLayout textLayout = new GridLayout(1, 4);
 		
-		//timer = new Timer();
+		
 		//Setting up the main components
 		screen.setContentPane(mainPanel);
 		mainPanel.setLayout(mainLayout);
 		gamePanel.setLayout(gameLayout);
 		invPanel.setLayout(invLayout);
+		textPanel.setLayout(textLayout);
+		
+		//Positing the GUI
 		mainPanel.add("West", gamePanel);
 		mainPanel.add("East", invPanel);
+		mainPanel.add("North", textPanel);
+		
+		//Adding the text
+		
+		difLabel = new JLabel("Difficulty: Null");
+		levelLabel = new JLabel("Level: " + level);
+		
+		
+		textPanel.add(levelLabel);
+		textPanel.add(difLabel);
+		
 		
 		//Setting tiles
 		backgroundSetup();
@@ -670,12 +691,34 @@ public class Game implements MouseListener{
 				
 			}
 		}
-		
 	}
 	
 	public void getDifficulty(int lvl) // This gets the difficulty from the button clicked in the main menu.
 	{
 		difficulty = lvl;
+	}
+	
+	public void setText()
+	{
+		textRefresh();
+	}
+	
+	private void textRefresh()
+	{
+		if (difficulty ==1 ){
+			difLabel.setText("Difficulty: Easy");
+			levelLabel.setText("Level: "+(level+1)+" of 1");
+		} 
+		else if (difficulty == 2)
+		{
+			difLabel.setText("Difficulty: Medium");
+			levelLabel.setText("Level: "+(level+1)+" of 3");
+		} 
+		else if (difficulty == 3)
+		{
+			difLabel.setText("Difficulty: Hard");
+			levelLabel.setText("Level: "+(level+1)+" of 6");
+		}
 	}
 	
 	private void nextLevel()
@@ -714,19 +757,25 @@ public class Game implements MouseListener{
 		} 
 		else if(difficulty == 2)
 		{
-			if (level == 3)
+			if (level == 2)
 			{
 				System.out.println("Finished medium!");
 			}
 			else 
 			{
 				level++;
-				nextLevel();
+				backgroundRefresh();
+				getLevel();
+				playerX = 12;
+				playerY = 1;
+				playerUpdate();
+				playerCheck = false;
+				textRefresh();
 			}
 		}
 		else if (difficulty == 3)
 		{
-			if (level == 6)
+			if (level == 5)
 			{
 				System.out.println("Finished hard!");
 			}
@@ -740,6 +789,7 @@ public class Game implements MouseListener{
 				playerY = 1;
 				playerUpdate();
 				playerCheck = false;
+				textRefresh();
 			}
 		}
 	}

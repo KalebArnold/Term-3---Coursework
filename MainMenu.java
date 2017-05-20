@@ -12,12 +12,13 @@ public class MainMenu
 	private JButton playHard;
 	private JButton leaderStats;
 	private Game g;
-	
+	private Leaderboard leader;
 	private int level = 0; // Easy = 1, Medium = 2, Hard = 3
 	
 
 	public MainMenu()
 	{
+		leader = new Leaderboard();
 		g = new Game();
 		//Below is the decloration of the main components of the interface.
 		JFrame screen = new JFrame(); 
@@ -55,6 +56,7 @@ public class MainMenu
 				g.visible();
 				level = 1;
 				levelUpdate();
+				g.setText();
 			} 
 		} );
 		playMedium.addActionListener(new ActionListener() 
@@ -64,6 +66,7 @@ public class MainMenu
 				g.visible();
 				level = 2;
 				levelUpdate();
+				g.setText();
 			} 
 		} );
 		playHard.addActionListener(new ActionListener() 
@@ -73,9 +76,16 @@ public class MainMenu
 				g.visible();
 				level = 3;
 				levelUpdate();
+				g.setText();
 			} 
 		} );
-		
+		leaderStats.addActionListener(new ActionListener() 
+		{ 
+			public void actionPerformed(ActionEvent e) 
+			{ 
+				leader.visible();
+			} 
+		} );
 		
 		
 		//Settings for the window
