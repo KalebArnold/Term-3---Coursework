@@ -46,6 +46,7 @@ public class Game implements MouseListener{
 	private JLabel difLabel;
 	private JLabel bestTime;
 	
+	//This is so I can use Accesor and mutator to the other classes.
 	private Random rnd = new Random();
 	private Graphics graph = new Graphics();
 	private Level lvl = new Level();
@@ -69,7 +70,6 @@ public class Game implements MouseListener{
 		GridLayout invLayout = new GridLayout(invRows, invColumns);
 		GridLayout textLayout = new GridLayout(1, 4);
 		
-		
 		//Setting up the main components
 		screen.setContentPane(mainPanel);
 		mainPanel.setLayout(mainLayout);
@@ -83,22 +83,19 @@ public class Game implements MouseListener{
 		mainPanel.add("North", textPanel);
 		
 		//Adding the text
-		
 		difLabel = new JLabel("Difficulty: Null");
 		levelLabel = new JLabel("Level: " + level);
+		timeLabel = new JLabel("Time: ");
+		bestTime = new JLabel("Best Time:");
 		
-		
+		textPanel.add(bestTime);
+		textPanel.add(timeLabel);
 		textPanel.add(levelLabel);
 		textPanel.add(difLabel);
-		//textPanel.add(timeLabel);
-		
 		
 		//Setting tiles
 		backgroundSetup();
 		inventorySetup();
-		
-		
-		//JLabel score = new JLabel("Score: " + timer.getTime());
 		
 		//Settings for the window
 		screen.setVisible(false);
@@ -110,6 +107,7 @@ public class Game implements MouseListener{
 	
 	public void mousePressed(MouseEvent e)
 	{
+		//This is the Left Mouse click which is used to pick up the planks and place them
 		if(e.getButton() == MouseEvent.BUTTON3)
 		{
 			for(int i=0; i <= (rows-1); i++){
@@ -279,6 +277,7 @@ public class Game implements MouseListener{
 				}
 			}
 	}
+		//This is the Left Mouse click which is the button used to move the player
 		if (e.getButton() == MouseEvent.BUTTON1)
 		{
 			for(int i=0; i <= (rows-1); i++){
@@ -288,7 +287,6 @@ public class Game implements MouseListener{
 						mapX = i;
 						mapY = j;
 					}
-				
 				}
 			}
 			if (playerCheck == false)
@@ -299,46 +297,8 @@ public class Game implements MouseListener{
 			System.out.println("Player X:" +playerX+ " Y:" +playerY);
 			//Vertical check for movement.
 			if ((map[mapX][mapY].getIcon().equals(graph.getPlankV())) || (map[mapX][mapY].getIcon().equals(graph.getBottomStump())) || (map[mapX][mapY].getIcon().equals(graph.getStump())) || (map[mapX][mapY].getIcon().equals(graph.getTopStump())))
-			{
-				if (playerX == (mapX+1) || playerX == (mapX-1))
-				{
-					if (playerY == mapY)
-					{
-						if (map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())){
-							map[playerX][playerY].setIcon(graph.getBottomStump());
-						}
-						if (map[playerX][playerY].getIcon().equals(graph.getTopStumpMan())){
-							map[playerX][playerY].setIcon(graph.getTopStump());
-						}
-						if (map[playerX][playerY].getIcon().equals(graph.getStumpMan())){
-							map[playerX][playerY].setIcon(graph.getStump());
-						}
-						if (map[playerX][playerY].getIcon().equals(graph.getPlankVMan())){
-							map[playerX][playerY].setIcon(graph.getPlankV());
-						}
-						if (map[mapX][mapY].getIcon().equals(graph.getPlankV()))
-						{
-							map[mapX][mapY].setIcon(graph.getPlankVMan());
-						}
-						if (map[mapX][mapY].getIcon().equals(graph.getBottomStump()))
-						{
-							map[mapX][mapY].setIcon(graph.getBottomStumpMan());
-						}
-						if (map[mapX][mapY].getIcon().equals(graph.getStump()))
-						{
-							map[mapX][mapY].setIcon(graph.getStumpMan());
-						}
-						if (map[mapX][mapY].getIcon().equals(graph.getTopStump()))
-						{
-							map[mapX][mapY].setIcon(graph.getTopStumpMan());
-							levelComplete();
-						}
-						
-						playerX = mapX;
-						playerY = mapY;
-					}
-				}  
-				
+			{				
+				// This checks the movement going downwards
 				if (playerX < mapX)
 				{
 					if (playerY == mapY)
@@ -348,8 +308,6 @@ public class Game implements MouseListener{
 						System.out.println("Moves: " +moves);
 						for (int i = 0; i <= moves; i++)
 						{
-							
-							
 							if ((map[mapX-i][mapY].getIcon().equals(graph.getPlankV())) || (map[mapX-i][mapY].getIcon().equals(graph.getPlankVMan())) || (map[mapX-i][mapY].getIcon().equals(graph.getBottomStump())) || (map[mapX-i][mapY].getIcon().equals(graph.getBottomStumpMan())) || (map[mapX-i][mapY].getIcon().equals(graph.getStump())) || (map[mapX-i][mapY].getIcon().equals(graph.getStumpMan())) || (map[mapX-i][mapY].getIcon().equals(graph.getTopStump())))
 							{
 								move = true;
@@ -365,12 +323,10 @@ public class Game implements MouseListener{
 							{
 								i = moves;
 								System.out.println("LoopEnded");
-							}
-							
+							}	
 						}
 						if (move)
 						{
-							
 							if (map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())){
 								map[playerX][playerY].setIcon(graph.getBottomStump());
 							}
@@ -383,8 +339,6 @@ public class Game implements MouseListener{
 							if (map[playerX][playerY].getIcon().equals(graph.getPlankVMan())){
 								map[playerX][playerY].setIcon(graph.getPlankV());
 							}
-							
-							
 							if (map[mapX][mapY].getIcon().equals(graph.getPlankV()))
 							{
 								map[mapX][mapY].setIcon(graph.getPlankVMan());
@@ -407,6 +361,7 @@ public class Game implements MouseListener{
 						}
 					}
 				}
+				// This checks the movement going upwards
 				if (playerX > mapX)
 				{
 					if (playerY == mapY)
@@ -481,46 +436,121 @@ public class Game implements MouseListener{
 			//Horisontal check for movement.
 			if ((map[mapX][mapY].getIcon().equals(graph.getPlankH())) || (map[mapX][mapY].getIcon().equals(graph.getBottomStump())) || (map[mapX][mapY].getIcon().equals(graph.getStump())) || (map[mapX][mapY].getIcon().equals(graph.getTopStump())))
 			{
-				if (playerY == (mapY+1) || playerY == (mapY-1))
+				if (playerY < mapY)
 				{
 					if (playerX == mapX)
 					{
-						if (map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())){
-							map[playerX][playerY].setIcon(graph.getBottomStump());
-						}
-						if (map[playerX][playerY].getIcon().equals(graph.getTopStumpMan())){
-							map[playerX][playerY].setIcon(graph.getTopStump());
-						}
-						if (map[playerX][playerY].getIcon().equals(graph.getStumpMan())){
-							map[playerX][playerY].setIcon(graph.getStump());
-						}
-						if (map[playerX][playerY].getIcon().equals(graph.getPlankHMan())){
-							map[playerX][playerY].setIcon(graph.getPlankH());
-						}
-						if (map[mapX][mapY].getIcon().equals(graph.getPlankH()))
+						moves = mapY - playerY;
+						for (int i = 0; i <= moves; i++)
 						{
-							map[mapX][mapY].setIcon(graph.getPlankHMan());
+							if ((map[mapX][mapY-i].getIcon().equals(graph.getPlankH())) || (map[mapX][mapY-i].getIcon().equals(graph.getPlankHMan())) || (map[mapX][mapY-i].getIcon().equals(graph.getBottomStump())) || (map[mapX][mapY-i].getIcon().equals(graph.getBottomStumpMan())) || (map[mapX][mapY-i].getIcon().equals(graph.getStump())) || (map[mapX][mapY-i].getIcon().equals(graph.getStumpMan())) || (map[mapX][mapY-i].getIcon().equals(graph.getTopStump())))
+							{
+								move = true;
+							}
+							else
+							{
+								move = false;
+							}
+							if (!move)
+							{
+								i = moves;
+							}	
 						}
-						if (map[mapX][mapY].getIcon().equals(graph.getBottomStump()))
+						if (move)
 						{
-							map[mapX][mapY].setIcon(graph.getBottomStumpMan());
+							if (map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())){
+								map[playerX][playerY].setIcon(graph.getBottomStump());
+							}
+							if (map[playerX][playerY].getIcon().equals(graph.getTopStumpMan())){
+								map[playerX][playerY].setIcon(graph.getTopStump());
+							}
+							if (map[playerX][playerY].getIcon().equals(graph.getStumpMan())){
+								map[playerX][playerY].setIcon(graph.getStump());
+							}
+							if (map[playerX][playerY].getIcon().equals(graph.getPlankHMan())){
+								map[playerX][playerY].setIcon(graph.getPlankH());
+							}
+							if (map[mapX][mapY].getIcon().equals(graph.getPlankH()))
+							{
+								map[mapX][mapY].setIcon(graph.getPlankHMan());
+							}
+							if (map[mapX][mapY].getIcon().equals(graph.getBottomStump()))
+							{
+								map[mapX][mapY].setIcon(graph.getBottomStumpMan());
+							}
+							if (map[mapX][mapY].getIcon().equals(graph.getStump()))
+							{
+								map[mapX][mapY].setIcon(graph.getStumpMan());
+							}
+							if (map[mapX][mapY].getIcon().equals(graph.getTopStump()))
+							{
+								map[mapX][mapY].setIcon(graph.getTopStumpMan());
+								levelComplete();
+							}
+							playerX = mapX;
+							playerY = mapY;
 						}
-						if (map[mapX][mapY].getIcon().equals(graph.getStump()))
-						{
-							map[mapX][mapY].setIcon(graph.getStumpMan());
-						}
-						if (map[mapX][mapY].getIcon().equals(graph.getTopStump()))
-						{
-							map[mapX][mapY].setIcon(graph.getTopStumpMan());
-						}
-						playerX = mapX;
-						playerY = mapY;
 					}
-				} 
-				
+				}
+				//This moves to the left on the horizontal axis
+				if (playerY > mapY)
+				{
+					if (playerX == mapX)
+					{
+						moves = playerY - mapY;
+						for (int i = 0; i <= moves; i++)
+						{
+							if ((map[mapX][mapY+i].getIcon().equals(graph.getPlankH())) || (map[mapX][mapY+i].getIcon().equals(graph.getPlankHMan())) || (map[mapX][mapY+i].getIcon().equals(graph.getBottomStump())) || (map[mapX][mapY+i].getIcon().equals(graph.getBottomStumpMan())) || (map[mapX][mapY+i].getIcon().equals(graph.getStump())) || (map[mapX][mapY+i].getIcon().equals(graph.getStumpMan())) || (map[mapX][mapY+i].getIcon().equals(graph.getTopStump())))
+							{
+								move = true;
+							}
+							else
+							{
+								move = false;
+							}
+							if (!move)
+							{
+								i = moves;
+							}	
+						}
+						if (move)
+						{
+							if (map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())){
+								map[playerX][playerY].setIcon(graph.getBottomStump());
+							}
+							if (map[playerX][playerY].getIcon().equals(graph.getTopStumpMan())){
+								map[playerX][playerY].setIcon(graph.getTopStump());
+							}
+							if (map[playerX][playerY].getIcon().equals(graph.getStumpMan())){
+								map[playerX][playerY].setIcon(graph.getStump());
+							}
+							if (map[playerX][playerY].getIcon().equals(graph.getPlankHMan())){
+								map[playerX][playerY].setIcon(graph.getPlankH());
+							}
+							if (map[mapX][mapY].getIcon().equals(graph.getPlankH()))
+							{
+								map[mapX][mapY].setIcon(graph.getPlankHMan());
+							}
+							if (map[mapX][mapY].getIcon().equals(graph.getBottomStump()))
+							{
+								map[mapX][mapY].setIcon(graph.getBottomStumpMan());
+							}
+							if (map[mapX][mapY].getIcon().equals(graph.getStump()))
+							{
+								map[mapX][mapY].setIcon(graph.getStumpMan());
+							}
+							if (map[mapX][mapY].getIcon().equals(graph.getTopStump()))
+							{
+								map[mapX][mapY].setIcon(graph.getTopStumpMan());
+								levelComplete();
+							}
+							playerX = mapX;
+							playerY = mapY;
+						}
+					}
+				}
 			}		
 		}
-		
 	}
 	
 	public void mouseReleased(MouseEvent e){}
