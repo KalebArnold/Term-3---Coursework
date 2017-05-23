@@ -1,6 +1,15 @@
 import java.util.Random;
-
+	/**
+* @author Kaleb Arnold
+* This class is the level class:
+* This picks a random level out of 4 then it will return all of the sections.
+**/
+	
 public class Level{
+	
+	
+	
+	
 	//Top and Borrom Stumps
 	private String topStump;
 	private String bottomStump;

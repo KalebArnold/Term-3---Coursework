@@ -1,5 +1,14 @@
 import javax.swing.ImageIcon;
 public class Graphics{
+	
+	/**
+* @author Kaleb Arnold
+* This class is the graphics class:
+* This just loads the images then returns them.
+**/
+	
+	
+	
 	//Top and bottom banks
 	private ImageIcon topBank = new ImageIcon("Images/bank2.jpg");
 	private ImageIcon bottomBank = new ImageIcon("Images/bank1.jpg");
