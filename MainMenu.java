@@ -47,8 +47,11 @@ public class MainMenu
 		gamePanel.add("Center", playMedium);
 		gamePanel.add("East", playHard);
 		
-		//Making the buttons work.
-	
+		/**
+		**This is where all the buttons work from (Easy, Medium, Hard and Leaderboard buttons)
+		**/
+		
+		
 		playEasy.addActionListener(new ActionListener() 
 		{ 
 			public void actionPerformed(ActionEvent e) 
@@ -111,4 +114,9 @@ public class MainMenu
 		}
 	}
 
+	public void updateTime()
+	{
+		g.updateTime();
+	}
+	
 }

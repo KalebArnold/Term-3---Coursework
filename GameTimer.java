@@ -9,6 +9,7 @@ public class GameTimer{
 		public void run()
 		{
 			seconds++;
+			System.out.println("seconds: " + seconds);
 		}
 	};
 	
@@ -28,5 +29,8 @@ public class GameTimer{
 	{
 		seconds = 0;
 	}
-	
 }
+
+
+
+

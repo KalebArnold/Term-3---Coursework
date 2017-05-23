@@ -29,18 +29,21 @@ public class Game implements MouseListener{
 	private int mapY = 0;
 	private int playerX = 0;
 	private int playerY = 0;
-	private int moves =0;
+	private int moves = 0;
+	private int seconds = 0;
+	private int endTime = 0;
 	private boolean playerCheck = false;
 	private boolean move = false;
+	private boolean end = false;
 	
 	private JButton map[][] = new JButton[rows][columns];
 	private JButton inventory[][] = new JButton[invRows][invColumns];
 	
-	private JFrame screen;
-	private JPanel mainPanel;
-	private JPanel gamePanel;
-	private JPanel invPanel;
-	private JPanel textPanel;
+	private JFrame screen = new JFrame();
+	private JPanel mainPanel = new JPanel();
+	private JPanel gamePanel = new JPanel();
+	private JPanel invPanel = new JPanel();
+	private JPanel textPanel = new JPanel();
 	private JLabel timeLabel;
 	private JLabel levelLabel;
 	private JLabel difLabel;
@@ -55,16 +58,15 @@ public class Game implements MouseListener{
 	//Log variables
 	private boolean log = false;
 	private boolean longLog = false;
-	
-	//private Timer timer;
+	private boolean extraLongLog = false;
 	
 	public Game(){
 		//Below is the decloration of the main components of the interface.
-		screen = new JFrame(); 
+		/*screen = new JFrame(); 
 		gamePanel = new JPanel();
 		mainPanel = new JPanel();
 		invPanel = new JPanel();
-		textPanel = new JPanel();
+		textPanel = new JPanel();*/
 		BorderLayout mainLayout = new BorderLayout();
 		GridLayout gameLayout = new GridLayout(rows,columns);
 		GridLayout invLayout = new GridLayout(invRows, invColumns);
@@ -102,7 +104,6 @@ public class Game implements MouseListener{
 		screen.setTitle("Puzzle Game...");
 		screen.setSize(((16*32)-16),(rows*32));
 		screen.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		
 	}
 	
 	public void mousePressed(MouseEvent e)
@@ -122,7 +123,7 @@ public class Game implements MouseListener{
 			//Picking up in a vertical position
 			if (map[mapX][mapY].getIcon().equals(graph.getPlankV()))
 			{
-				if (!log && !longLog)
+				if (!log && !longLog && !extraLongLog)
 				{
 					if (playerX == (mapX+1) && (map[mapX][mapY].getIcon().equals(graph.getPlankV()))&& (map[mapX-1][mapY].getIcon().equals(graph.getPlankV())))
 					{					
@@ -188,6 +189,25 @@ public class Game implements MouseListener{
 					}else if (playerX == (mapX+1) && playerX > 2 && mapY == playerY)
 					{
 						if ((map[playerX-3][playerY].getIcon().equals(graph.getStump())) || (map[playerX-3][playerY].getIcon().equals(graph.getTopStump())) || (map[playerX-3][playerY].getIcon().equals(graph.getBottomStump())))
+						{
+							if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan()))){
+								placeLogV(playerX-1, mapY, 1);
+							}
+						}
+					}
+				}
+				if (extraLongLog){
+					if (playerX == (mapX-1) && playerX <= 9 && mapY == playerY)
+					{
+						if ((map[playerX+4][playerY].getIcon().equals(graph.getStump())) || (map[playerX+4][playerY].getIcon().equals(graph.getTopStump())) || (map[playerX+4][playerY].getIcon().equals(graph.getBottomStump())))
+						{
+							if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan()))){
+								placeLogV(playerX+1, mapY, 2);
+							}
+						}
+					}else if (playerX == (mapX+1) && playerX > 2 && mapY == playerY)
+					{
+						if ((map[playerX-4][playerY].getIcon().equals(graph.getStump())) || (map[playerX-4][playerY].getIcon().equals(graph.getTopStump())) || (map[playerX-4][playerY].getIcon().equals(graph.getBottomStump())))
 						{
 							if ((map[playerX][playerY].getIcon().equals(graph.getBottomStumpMan())) || (map[playerX][playerY].getIcon().equals(graph.getStumpMan()))){
 								placeLogV(playerX-1, mapY, 1);
@@ -603,7 +623,6 @@ public class Game implements MouseListener{
 		}
 	gameX = 0;
 	}
-	
 	private void backgroundRefresh()
 	{
 		for(int i = 0; i<rows; i++){
@@ -643,7 +662,6 @@ public class Game implements MouseListener{
 		}
 		gameX = 0;
 	}
-	
 	private void inventorySetup()
 	{
 		for(int i = 0; i<invRows; i++)
@@ -696,7 +714,6 @@ public class Game implements MouseListener{
 	{
 		backSelect = rnd.nextInt((20 - 0) + 1) + 0;
 	}
-	
 	private void placeLogV(int x, int y, int left)
 	{
 		if (log)
@@ -720,6 +737,25 @@ public class Game implements MouseListener{
 			{
 				map[x+1][y].setIcon(graph.getPlankV());
 				longLog = false;
+				invUpdate();
+			}
+		}
+		if (extraLongLog)
+		{
+			// left 1 means that it's going left (3 length plank)
+			if (left == 1)
+			{;
+				map[x-1][y].setIcon(graph.getPlankV());
+				map[x-2][y].setIcon(graph.getPlankV());
+				extraLongLog = false;
+				invUpdate();
+			}
+			// left 2 means that it's going right (3 length plank)
+			if (left == 2)
+			{
+				map[x+1][y].setIcon(graph.getPlankV());
+				map[x+2][y].setIcon(graph.getPlankV());
+				extraLongLog = false;
 				invUpdate();
 			}
 		}
@@ -751,24 +787,50 @@ public class Game implements MouseListener{
 				invUpdate();
 			}
 		}
+		if (extraLongLog)
+		{
+			map[x][y].setIcon(graph.getPlankH());
+			// down 1 means that it's going down
+			if (down == 1)
+			{
+				map[x][y+1].setIcon(graph.getPlankH());
+				map[x][y+2].setIcon(graph.getPlankH());
+				extraLongLog = false;
+				invUpdate();
+			}
+			// down 2 means that it's going down
+			if (down == 2)
+			{
+				map[x][y-1].setIcon(graph.getPlankH());
+				map[x][y-2].setIcon(graph.getPlankH());
+				extraLongLog = false;
+				invUpdate();
+			}
+		}
 		
 	}
-	
 	private void invUpdate()
 	{
-		if (log == true)
+		if (log)
 		{
 			inventory[1][1].setIcon(graph.getPlankV());
 		}
-		if (longLog == true)
+		if (longLog)
 		{
 			inventory[1][1].setIcon(graph.getPlankV());
 			inventory[2][1].setIcon(graph.getPlankV());
 		}
-		if (!log && !longLog)
+		if (extraLongLog)
+		{
+			inventory[1][1].setIcon(graph.getPlankV());
+			inventory[2][1].setIcon(graph.getPlankV());
+			inventory[3][1].setIcon(graph.getPlankV());
+		}
+		if (!log && !longLog && !extraLongLog)
 		{
 			inventory[1][1].setIcon(graph.getWaterOne());
 			inventory[2][1].setIcon(graph.getWaterOne());
+			inventory[3][1].setIcon(graph.getWaterOne());
 		}
 	}
 	
@@ -922,18 +984,27 @@ public class Game implements MouseListener{
 		System.out.println("Player Updated X:" + playerX + " Y:" + playerY);
 		
 	}
-	
+	private void emptyInv()
+	{
+		log = false;
+		longLog = false;
+		extraLongLog = false;
+		invUpdate();
+	}
 	private void levelComplete()
 	{
 		
 		if (difficulty == 1){
 			System.out.println("Finished easy!");
+			emptyInv();
 		} 
 		else if(difficulty == 2)
 		{
 			if (level == 2)
 			{
 				System.out.println("Finished medium!");
+				end = true;
+				emptyInv();
 			}
 			else 
 			{
@@ -945,6 +1016,7 @@ public class Game implements MouseListener{
 				playerUpdate();
 				playerCheck = false;
 				textRefresh();
+				emptyInv();
 			}
 		}
 		else if (difficulty == 3)
@@ -952,6 +1024,7 @@ public class Game implements MouseListener{
 			if (level == 5)
 			{
 				System.out.println("Finished hard!");
+				emptyInv();
 			}
 			else 
 			{
@@ -964,7 +1037,20 @@ public class Game implements MouseListener{
 				playerUpdate();
 				playerCheck = false;
 				textRefresh();
+				emptyInv();
 			}
 		}
 	}
+	public void updateTime()
+	{
+		seconds = t.getTime();
+		timeLabel.setText("Time: " + seconds);
+		if (end)
+		{
+			endTime = seconds;
+		}
+	}
 }
+
+
+

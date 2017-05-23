@@ -12,7 +12,9 @@ public class Leaderboard
 	private JPanel hardPanel;
 	private JLabel title;
 	
-	
+	private int[] easyLeader = new int[];	
+	private int[] mediumLeader = new int[];	
+	private int[] hardLeader = new int[];	
 	
 	
 	public Leaderboard(){
