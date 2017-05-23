@@ -25,6 +25,7 @@ public class Level{
 	{
 		pickLevel();
 	}
+	//this is where a random level is picked out of 4
 	private void pickLevel()
 	{
 		levelPick = rand.nextInt(4) + 1;
@@ -44,15 +45,8 @@ public class Level{
 		{
 			levelFour();
 		}
-		/*else if (levelPick == 5)
-		{
-			levelFive();
-		}
-		else if (levelPick == 6)
-		{
-			levelSix();
-		}*/
 	}
+	//These are where the levels are created
 	private void levelOne()
 	{
 		topStump = "0003";
@@ -117,6 +111,7 @@ public class Level{
 		longPlank1 = "1103";
 		longPlank2 = "1003";
 	}
+	//all the bellow is just returning the strings for the parts of the map
 	public String getTopStump()
 	{
 		return topStump;

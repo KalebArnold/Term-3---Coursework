@@ -2,6 +2,18 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
+
+/**
+* @author Kaleb Arnold
+* This class is the main menu class:
+* Easy/medium/hard buttons and leaderboard. (this is also used for the transfer of variables from the game to the leaderboard)
+* Declaring variables
+* Including: 
+* - Buttons for the main menu
+* - Player postions
+* - Level stats and all the Swing variables
+**/
+
 public class MainMenu 
 {
 // variables and locals to this class
@@ -51,7 +63,7 @@ public class MainMenu
 		**This is where all the buttons work from (Easy, Medium, Hard and Leaderboard buttons)
 		**/
 		
-		
+	// this is the easy button
 		playEasy.addActionListener(new ActionListener() 
 		{ 
 			public void actionPerformed(ActionEvent e) 
@@ -60,8 +72,11 @@ public class MainMenu
 				level = 1;
 				levelUpdate();
 				g.setText();
+				g.resetLevelCounter(0);
+				easyHigh();
 			} 
 		} );
+		// this is the medium button
 		playMedium.addActionListener(new ActionListener() 
 		{ 
 			public void actionPerformed(ActionEvent e) 
@@ -70,8 +85,11 @@ public class MainMenu
 				level = 2;
 				levelUpdate();
 				g.setText();
+				g.resetLevelCounter(0);
+				mediumHigh();
 			} 
 		} );
+		// this is the hard button
 		playHard.addActionListener(new ActionListener() 
 		{ 
 			public void actionPerformed(ActionEvent e) 
@@ -80,13 +98,32 @@ public class MainMenu
 				level = 3;
 				levelUpdate();
 				g.setText();
+				g.resetLevelCounter(0);
+				hardHigh();
 			} 
 		} );
+		// this is the leaderboard button
 		leaderStats.addActionListener(new ActionListener() 
 		{ 
 			public void actionPerformed(ActionEvent e) 
 			{ 
 				leader.visible();
+				if (level == 1)
+				{
+					easyScore();
+				}
+				else if (level == 2)
+				{
+					mediumScore();
+				}
+				else if (level == 3)
+				{
+					hardScore();
+				}
+				
+				
+				
+				
 			} 
 		} );
 		
@@ -97,7 +134,7 @@ public class MainMenu
 		screen.setSize(400,350);
 		screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
+	// this tells the game what difficulty the game should be on
 	private void levelUpdate()
 	{
 		if (level == 1)
@@ -113,10 +150,47 @@ public class MainMenu
 			g.getDifficulty(3);
 		}
 	}
-
+// These are the things which push your game score into the leaderboards
+	public void easyScore()
+	{
+		System.out.println("Final Time: " +g.pushEasy());
+		leader.getEasy(g.pushEasy());
+		leader.setEasy();
+	}
+	public void hardScore()
+	{
+		leader.getHard(g.pushHard());
+		leader.setHard();
+	}
+	public void mediumScore()
+	{
+		leader.getMedium(g.pushMedium());
+		leader.setMedium();
+	}
+	// These are the things which put the high score into the game interface
+	private void easyHigh()
+	{
+		g.easyHighScore(leader.easyHigh());
+		g.setText();
+	}
+	private void mediumHigh()
+	{
+		g.mediumHighScore(leader.mediumHigh());
+		g.setText();
+	}
+	private void hardHigh()
+	{
+		g.hardHighScore(leader.hardHigh());
+		g.setText();
+	}
+	//This is used to update the time
 	public void updateTime()
 	{
 		g.updateTime();
+	}
+	private void resetTime()
+	{
+		g.resetTopScore();
 	}
 	
 }

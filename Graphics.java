@@ -23,7 +23,7 @@ public class Graphics{
 	public Graphics(){
 		
 	}
-	
+	// these just return the ImageIcons
 	public ImageIcon getTopBank(){
 		return topBank;
 	}

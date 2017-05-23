@@ -6,6 +6,7 @@ import java.util.Random;
 public class Game implements MouseListener{
 // variables and locals to this class
 /**
+* @author Kaleb Arnold
 * This class is the main game class:
 * Player Movement, Plank Placing, Level loading, Inventory Update.
 * Declaring variables
@@ -32,9 +33,11 @@ public class Game implements MouseListener{
 	private int moves = 0;
 	private int seconds = 0;
 	private int endTime = 0;
+	private int highScore = 0;
+	private int mins = 0;
 	private boolean playerCheck = false;
 	private boolean move = false;
-	private boolean end = false;
+	private boolean end = true;
 	
 	private JButton map[][] = new JButton[rows][columns];
 	private JButton inventory[][] = new JButton[invRows][invColumns];
@@ -62,11 +65,7 @@ public class Game implements MouseListener{
 	
 	public Game(){
 		//Below is the decloration of the main components of the interface.
-		/*screen = new JFrame(); 
-		gamePanel = new JPanel();
-		mainPanel = new JPanel();
-		invPanel = new JPanel();
-		textPanel = new JPanel();*/
+
 		BorderLayout mainLayout = new BorderLayout();
 		GridLayout gameLayout = new GridLayout(rows,columns);
 		GridLayout invLayout = new GridLayout(invRows, invColumns);
@@ -703,6 +702,7 @@ public class Game implements MouseListener{
 	{
 		backgroundSetup();
 	}
+	// this makes the window visible
 	public void visible()
 	{
 		screen.setVisible(true);
@@ -714,6 +714,7 @@ public class Game implements MouseListener{
 	{
 		backSelect = rnd.nextInt((20 - 0) + 1) + 0;
 	}
+	//this is called so that you can place a vertical plank
 	private void placeLogV(int x, int y, int left)
 	{
 		if (log)
@@ -761,6 +762,7 @@ public class Game implements MouseListener{
 		}
 		
 	}
+	//this is called so that you can place a horizontal plank
 	private void placeLogH(int x, int y, int down)
 	{
 		if (log)
@@ -809,6 +811,7 @@ public class Game implements MouseListener{
 		}
 		
 	}
+//this updates the inventory
 	private void invUpdate()
 	{
 		if (log)
@@ -833,7 +836,7 @@ public class Game implements MouseListener{
 			inventory[3][1].setIcon(graph.getWaterOne());
 		}
 	}
-	
+	// this draws the level
 	private void getLevel()
 	{
 		lvl.newLevel();
@@ -932,13 +935,15 @@ public class Game implements MouseListener{
 	public void getDifficulty(int lvl) // This gets the difficulty from the button clicked in the main menu.
 	{
 		difficulty = lvl;
+		end = false;
+		t.timerReset();
 	}
-	
+	// this just calls textRefresh();
 	public void setText()
 	{
 		textRefresh();
 	}
-	
+	 // this refreshes all of the interface text
 	private void textRefresh()
 	{
 		if (difficulty ==1 ){
@@ -955,6 +960,21 @@ public class Game implements MouseListener{
 			difLabel.setText("Difficulty: Hard");
 			levelLabel.setText("Level: "+(level+1)+" of 6");
 		}
+		int temp = highScore;
+		for (int i =0; temp >= 60; i++)
+		{
+			temp -= 60;
+			mins++;
+		}
+		if (temp < 9)
+		{
+			bestTime.setText("Best Time: " + mins+ ":0" + temp);
+		} else 
+		{
+			bestTime.setText("Best Time: " + mins+ ":" + temp);
+		}
+		temp = 0;
+		mins = 0;
 	}
 	
 	private void nextLevel()
@@ -962,7 +982,7 @@ public class Game implements MouseListener{
 		backgroundRefresh();
 		getLevel();
 	}
-	
+	// this finds out where the player is then creates the player coords
 	private void playerUpdate()
 	{
 		for (int i = 0; i > columns; i++)
@@ -991,12 +1011,18 @@ public class Game implements MouseListener{
 		extraLongLog = false;
 		invUpdate();
 	}
+	/**
+	*This checks if the level has ended
+	**/
+	
 	private void levelComplete()
 	{
-		
 		if (difficulty == 1){
 			System.out.println("Finished easy!");
 			emptyInv();
+			pushEasy();
+			endTime = t.getTime();
+			end = true;
 		} 
 		else if(difficulty == 2)
 		{
@@ -1005,6 +1031,7 @@ public class Game implements MouseListener{
 				System.out.println("Finished medium!");
 				end = true;
 				emptyInv();
+				pushMedium();
 			}
 			else 
 			{
@@ -1025,6 +1052,8 @@ public class Game implements MouseListener{
 			{
 				System.out.println("Finished hard!");
 				emptyInv();
+				pushHard();
+				
 			}
 			else 
 			{
@@ -1041,15 +1070,61 @@ public class Game implements MouseListener{
 			}
 		}
 	}
+	// these return the endTime the player has got.
+	public int pushEasy()
+	{
+		return endTime;
+	}
+	public int pushMedium()
+	{
+		return endTime;
+	}
+	public int pushHard()
+	{
+		return endTime;
+	}
+	// this is the time updater
 	public void updateTime()
 	{
 		seconds = t.getTime();
-		timeLabel.setText("Time: " + seconds);
-		if (end)
+		if (!end)
 		{
-			endTime = seconds;
+			timeLabel.setText("Time: " + seconds);
+		}
+		else if (end)
+		{
+			if (endTime ==0)
+			{
+				endTime = seconds;
+			}
+			timeLabel.setText("Time: " + endTime);
 		}
 	}
+	// this gets the high score so that it can be displayed in the interface
+	public void easyHighScore(int x)
+	{
+		highScore = x;
+	}
+	public void mediumHighScore(int x)
+	{
+		highScore = x;
+	}
+	public void hardHighScore(int x)
+	{
+		highScore = x;
+	}
+	// this restars the level counter so that you can start again
+	public void resetLevelCounter(int x)
+	{
+		level = x;
+	}
+	// this rests the highscore in the interface so that it can get a new one if it has changed
+	public void resetTopScore()
+	{
+		endTime = 0;
+	}
+	
+	
 }
 
 
